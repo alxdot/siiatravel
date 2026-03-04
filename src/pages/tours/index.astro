@@ -1,17 +1,93 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { sanityClient, urlFor } from "../../lib/sanity";
+
+type Tour = {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  excerpt?: string;
+  heroImage?: any;
+  priceFromEur?: number;
+  durationHours?: number;
+  format?: "walking" | "car" | "mixed";
+};
+
+const tours: Tour[] = await sanityClient.fetch(`
+  *[_type == "tour"] | order(_createdAt desc) {
+    _id,
+    title,
+    slug,
+    excerpt,
+    heroImage,
+    priceFromEur,
+    durationHours,
+    format
+  }
+`);
 ---
 
 <BaseLayout>
   <Fragment slot="head">
     <title>Экскурсии в Стамбуле — Siiatravel</title>
-    <meta name="description" content="Частные экскурсии в Стамбуле: популярные маршруты, формат, цены «от». Быстрый ответ в WhatsApp." />
+    <meta
+      name="description"
+      content="Частные экскурсии в Стамбуле: популярные маршруты, формат, цены «от». Быстрый ответ в WhatsApp."
+    />
   </Fragment>
 
   <section class="max-w-6xl mx-auto px-4 py-16">
-    <h1 class="text-3xl font-semibold text-navy mb-4">Экскурсии в Стамбуле</h1>
-    <p class="text-navy/80 max-w-2xl">
-      Страница-заготовка. На следующем этапе (Sanity) сюда подтянем 14 экскурсий и сделаем нормальный листинг.
-    </p>
+    <h1 class="text-3xl font-semibold text-navy mb-6">Экскурсии в Стамбуле</h1>
+
+    {tours.length === 0 ? (
+      <p class="text-navy/80 max-w-2xl">
+        Пока экскурсий нет. Добавьте документы Tour в Sanity Studio и обновите страницу.
+      </p>
+    ) : (
+      <ul class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {tours.map((tour) => (
+          <li class="rounded-2xl border border-navy/10 bg-white shadow-sm overflow-hidden">
+            {tour.heroImage ? (
+              <img
+                src={urlFor(tour.heroImage).width(900).height(600).fit("crop").url()}
+                alt={tour.title}
+                loading="lazy"
+                class="w-full h-48 object-cover"
+              />
+            ) : (
+              <div class="w-full h-48 bg-navy/5" />
+            )}
+
+            <div class="p-5">
+              <h2 class="text-lg font-semibold text-navy leading-snug">
+                <a class="hover:underline" href={`/tours/${tour.slug.current}`}>
+                  {tour.title}
+                </a>
+              </h2>
+
+              {tour.excerpt && <p class="text-navy/80 mt-2 line-clamp-3">{tour.excerpt}</p>}
+
+              <div class="text-sm text-navy/80 mt-4 flex flex-wrap gap-x-4 gap-y-1">
+                {typeof tour.priceFromEur === "number" && (
+                  <span>
+                    <strong class="text-navy">от {tour.priceFromEur} €</strong>
+                  </span>
+                )}
+                {typeof tour.durationHours === "number" && <span>{tour.durationHours} ч</span>}
+                {tour.format && (
+                  <span>
+                    {tour.format === "walking"
+                      ? "пешая"
+                      : tour.format === "car"
+                        ? "с машиной"
+                        : "смешанная"}
+                  </span>
+                )}
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+    )}
   </section>
 </BaseLayout>

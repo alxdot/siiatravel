@@ -1,6 +1,7 @@
 # AI Development Context — Siiatravel
 
 This repo is an AI-assisted build. AI agents (Codex/ChatGPT) must follow the rules here.
+Preferred Codex model: gpt-5.3-codex
 
 ## Project overview
 - Product: Siiatravel — Istanbul travel experiences & services
