@@ -46,3 +46,14 @@ Do this first:
 - Keep SSR only for /reviews (recommended).
 - Anti-spam: honeypot + rate limiting; Turnstile only if needed.
 - Provide ONE step to begin (file path + exact change), then wait.
+
+### API routes
+
+Server endpoints are implemented in:
+
+src/pages/api/
+
+Example:
+src/pages/api/review.ts
+
+These endpoints run as serverless functions on Vercel.

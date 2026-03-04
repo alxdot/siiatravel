@@ -23,3 +23,14 @@ M4 — Reviews system (submission → moderation → publish; anti-spam RU/BY-sa
 
 ## Working protocol
 ONE step at a time; wait for confirmation; troubleshoot current step only.
+
+### Reviews SEO rule
+
+Reviews must support Schema.org structured data generation.
+
+Goal:
+Allow Google rich snippets (ratings and review counts)
+for tours and services.
+
+Reviews should be linked to the specific service being reviewed
+(e.g., tour, yacht, transfer).

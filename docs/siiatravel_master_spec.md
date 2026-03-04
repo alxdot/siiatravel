@@ -901,6 +901,27 @@ M3 — Integration
 
 M4 — Reviews system
 
+### Implementation progress
+
+M4 Step 1 — Review schema (Sanity) ✅
+File: `studio/schemaTypes/review.ts`
+
+M4 Step 2 — Review submission API (Astro endpoint) ✅
+File: `src/pages/api/review.ts`
+
+Endpoint:
+POST `/api/review`
+
+Features:
+- accepts JSON
+- honeypot spam protection
+- validation
+- creates review in Sanity
+- default status = `pending`
+
+Deployment:
+Working on Vercel production
+
 - Submission → moderation → publish
 - Anti-spam controls
 
@@ -1124,6 +1145,17 @@ Approved Tone:
 - Desktop sidebar CTA allowed on detail pages
 
 ---
+
+## 23) Future improvement:
+
+Reviews will be used to generate Schema.org structured data
+(JSON-LD) for tour and service pages.
+
+Goal:
+Enable Google rich snippets (rating stars in search results).
+
+This will be implemented after the review UI and moderation system
+are complete.
 
 
 ---

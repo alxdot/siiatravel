@@ -159,6 +159,72 @@ Fields:
 Moderation occurs inside Sanity Studio.
 Only approved reviews appear on the website.
 
+## Review system architecture
+
+The site includes a custom review system backed by Sanity CMS.
+
+Submission pipeline:
+
+User
+↓
+Review form (/reviews)
+↓
+POST /api/review (Astro server endpoint)
+↓
+Validation + spam protection (honeypot)
+↓
+Sanity CMS document created
+↓
+status = pending
+↓
+Manual moderation in Sanity Studio
+↓
+Approved reviews displayed on site
+
+Files:
+
+src/pages/api/review.ts
+studio/schemaTypes/review.ts
+
+## Review structured data (SEO)
+
+Approved reviews should eventually generate Schema.org structured data.
+
+Purpose:
+Enable Google rich snippets (stars + review counts).
+
+Implementation plan:
+
+Tour pages should output JSON-LD using:
+
+@type: TouristTrip
+aggregateRating
+review
+
+Example:
+
+{
+ "@context": "https://schema.org",
+ "@type": "TouristTrip",
+ "name": "Private Istanbul Old City Tour",
+ "aggregateRating": {
+   "@type": "AggregateRating",
+   "ratingValue": "4.9",
+   "reviewCount": "37"
+ }
+}
+
+Important:
+
+Google only accepts review rich snippets when the review belongs to a specific service or product.
+
+Therefore reviews should be associated with:
+
+tour
+yacht
+transfer
+guide
+
 ---
 
 # 9. Conversion System
