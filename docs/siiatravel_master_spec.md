@@ -734,7 +734,45 @@ M2 — Sanity ready
 
 M3 — Integration
 
-- Astro pulls Tours/Services/Yachts/Helicopter/Event pages from Sanity
+✅ Installed Sanity packages in Astro:
+
+- @sanity/client
+- groq
+- @sanity/image-url
+
+✅ Created Sanity client wrapper:
+
+- src/lib/sanity.ts
+  - sanityClient configured via import.meta.env:
+    - PUBLIC_SANITY_PROJECT_ID
+    - PUBLIC_SANITY_DATASET
+    - PUBLIC_SANITY_API_VERSION
+  - useCdn: true
+  - urlFor helper for images
+
+✅ Added test endpoint to verify GROQ connectivity:
+
+- src/pages/sanity-test.json.ts
+  - GET /sanity-test.json
+  - Query: count(*)
+  - Expected: { ok: true, count: 0, projectId, dataset }
+
+✅ Fixed Sanity image-url deprecation:
+
+- switched to createImageUrlBuilder from @sanity/image-url
+
+- ⏳ Astro pulls Tours/Services/Yachts/Helicopter/Event pages from Sanity (TODO)
+
+✅ Vercel env vars configured + deployment verified (Production + Preview):
+
+- Added Vercel Environment Variables:
+  - PUBLIC_SANITY_PROJECT_ID=henfiqur
+  - PUBLIC_SANITY_DATASET=production
+  - PUBLIC_SANITY_API_VERSION=2023-10-01
+- Triggered Production redeploy → Status: Ready (green)
+- Verified deployed endpoint:
+  - https://siiatravel.vercel.app/sanity-test.json → { ok:true, count:0, projectId:"henfiqur", dataset:"production" } (count=0 expected until docs exist)
+
 
 M4 — Reviews system
 
@@ -751,9 +789,22 @@ M6 — Performance pass
 
 M7 — Deploy staging
 
-- Vercel staging deploy working (preview domain)
-- Env vars configured
-- Sanity Studio accessible
+✅ Vercel staging deploy working (preview domain):
+- Preview/Production domain: https://siiatravel.vercel.app
+- Auto-deploy GitHub → Vercel confirmed
+
+✅ Environment Variables configured in Vercel (Production + Preview):
+- PUBLIC_SANITY_PROJECT_ID=henfiqur
+- PUBLIC_SANITY_DATASET=production
+- PUBLIC_SANITY_API_VERSION=2023-10-01
+
+✅ Production redeploy verified green:
+- Build + deploy status: Ready
+- Deployed Sanity connectivity test:
+  - /sanity-test.json returns ok:true (count:0 expected until content exists)
+
+⚠️ Note:
+- Sanity Studio is local at /studio (http://localhost:3333). It is not deployed to Vercel.
 
 M8 — Content migration
 
@@ -805,6 +856,15 @@ ADR-009 — Project specification stored in repository under /docs
 ADR-010 — (2026-03-04) Staging runs on https://siiatravel.vercel.app (no custom domain until M9 Production cutover)
 ADR-011 — (2026-03-04) Staging is intentionally blocked from indexing using <meta name="robots" content="noindex, nofollow, noarchive"> until production cutover (remove before indexing real domain)
 ADR-012 — (2026-03-04) Sanity Studio initialized in /studio; projectId=henfiqur; dataset=production; local Studio verified at http://localhost:3333
+ADR-013 — (2026-03-04) Astro ↔ Sanity integration completed:
+    Added src/lib/sanity.ts (sanityClient + urlFor)
+    Added /sanity-test.json endpoint (count(*) query verified ok:true locally)
+    Added @sanity/client, groq, @sanity/image-url
+    Updated image URL builder to createImageUrlBuilder (deprecation fix)
+ADR-014 — (2026-03-04) Vercel env vars configured for Sanity + production connectivity verified:
+    Set PUBLIC_SANITY_PROJECT_ID=henfiqur, PUBLIC_SANITY_DATASET=production, PUBLIC_SANITY_API_VERSION=2023-10-01 in Vercel (Production + Preview)
+    Redeploy succeeded (green)
+    /sanity-test.json verified on https://siiatravel.vercel.app (ok:true, count:0 expected)
 
 ---
 
