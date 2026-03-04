@@ -17,6 +17,7 @@
     "groq": "^5.13.0"
   },
   "devDependencies": {
+    "@astrojs/vercel": "^9.0.4",
     "@tailwindcss/cli": "^4.2.1",
     "@tailwindcss/vite": "^4.2.1",
     "tailwindcss": "^4.2.1"
