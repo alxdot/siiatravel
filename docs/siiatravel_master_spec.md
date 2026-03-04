@@ -1,4 +1,4 @@
-# SIIATRAVEL — MASTER SPECIFICATION v2.4 (PRO)
+# siiatravel_master_spec_v1_1
 
 Git + GitHub + Astro + Tailwind + TypeScript (Strict) + Sanity + Vercel
 
@@ -662,8 +662,8 @@ M0 — Workstation ready
 - core.editor = VS Code
 ✅ GitHub account created
 ✅ GitHub repository created for siiatravel (Private)
-⬜ Local repo initialized + first commit
-⬜ Push to GitHub
+✅ Local repo initialized + first commit
+✅ Push to GitHub
 ⬜ Vercel connected to GitHub repo + first deploy
 ✅ Workspace folder created: C:\Astro\Projects\siiatravel
 ✅ Astro dev server runs locally
@@ -776,6 +776,7 @@ ADR-005 — Staging domain: free Vercel preview domain (vercel.app)
 ADR-006 — TypeScript Strict Mode
 ADR-007 — Design system locked: Light header, Navy primary UI, Green CTA (WhatsApp-first), Modern clean typography (Inter/system), Professional guide service tone.
 ADR-008 — GitHub repository visibility: Private (default)
+ADR-009 — Project specification stored in repository under /docs
 
 ---
 
