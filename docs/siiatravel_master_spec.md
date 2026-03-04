@@ -664,13 +664,17 @@ M0 — Workstation ready
 ✅ GitHub repository created for siiatravel (Private)
 ✅ Local repo initialized + first commit
 ✅ Push to GitHub
-⬜ Vercel connected to GitHub repo + first deploy
 ✅ Workspace folder created: C:\Astro\Projects\siiatravel
 ✅ Astro dev server runs locally
 ✅ Astro minimal + TS strict created
 ✅ Tailwind added
 ✅ Installed Tailwind Vite plugin dependency (@tailwindcss/vite) and verified dev server
 ✅ site and trailingSlash: 'never' configured
+✅ Vercel connected to GitHub repo + first deploy
+Decision (2026-03-04):
+First successful deploy completed.
+Astro project builds automatically on Vercel via GitHub integration.
+Preview URL: <https://siiatravel.vercel.app/>
 
 ### Environment decisions
 
