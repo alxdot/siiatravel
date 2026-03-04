@@ -9,8 +9,8 @@ import Footer from '../components/Footer.astro';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    {import.meta.env.VERCEL_ENV !== "production" && (
-      <meta name="robots" content="noindex, nofollow, noarchive" />
+   {!import.meta.env.PROD && (
+  <meta name="robots" content="noindex, nofollow, noarchive" />
     )}
 
     <slot name="head" />
