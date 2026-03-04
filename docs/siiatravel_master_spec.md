@@ -645,6 +645,8 @@ Release rules:
   - `src/components/Footer.astro`
 - Pages:
   - `src/pages/...` (routes follow spec §6.1)
+- Sanity Studio:
+  - studio/ (Sanity Studio app)
 
   SEO staging noindex (temporary): src/layouts/BaseLayout.astro
   Env template committed: .env.example (secrets in .env.local, ignored)
@@ -713,7 +715,20 @@ Implemented:
 
 M2 — Sanity ready
 
-- Studio created
+✅ Sanity Studio created inside repo: C:\Astro\Projects\siiatravel\studio
+✅ Logged in via Sanity CLI
+✅ Project created: siiatravel
+✅ Organization created: Personal
+✅ Dataset: production (public read)
+✅ TypeScript enabled
+✅ Package manager: npm
+✅ Studio dev server verified: npm run dev → http://localhost:3333/ shows “No document types” (expected)
+✅ Astro env vars added to .env.local:
+    PUBLIC_SANITY_PROJECT_ID=henfiqur
+    PUBLIC_SANITY_DATASET=production
+    PUBLIC_SANITY_API_VERSION=2024-01-01
+    SANITY_API_TOKEN= (placeholder, not used yet)
+
 - Schemas defined
 - Sample content created
 
@@ -789,6 +804,7 @@ ADR-008 — GitHub repository visibility: Private (default)
 ADR-009 — Project specification stored in repository under /docs
 ADR-010 — (2026-03-04) Staging runs on https://siiatravel.vercel.app (no custom domain until M9 Production cutover)
 ADR-011 — (2026-03-04) Staging is intentionally blocked from indexing using <meta name="robots" content="noindex, nofollow, noarchive"> until production cutover (remove before indexing real domain)
+ADR-012 — (2026-03-04) Sanity Studio initialized in /studio; projectId=henfiqur; dataset=production; local Studio verified at http://localhost:3333
 
 ---
 
@@ -821,10 +837,11 @@ To prevent getting stuck mid-step:
 ## 21) Placeholders to fill (as you set things up)
 
 - GitHub repo URL: <https://github.com/alxdot/siiatravel>
-- Vercel project URL: ________________________
-- Staging preview domain: ________________________
-- Sanity projectId: ________________________
-- Studio URL: ________________________
+- Vercel project URL: <https://vercel.com/alekews-7993s-projects/siiatravel>
+- Staging preview domain: <https://siiatravel.vercel.app>
+- Sanity projectId: henfiqur
+- Studio URL: <http://localhost:3333> (local dev)
+- Sanity Manage URL: opened via npx sanity manage
 - WhatsApp number: ________________________
 - Lead email inbox: ________________________
 - Telegram handle/link (optional): ________________________
