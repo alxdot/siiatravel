@@ -675,7 +675,8 @@ Decision (2026-03-04):
 First successful deploy completed.
 Astro project builds automatically on Vercel via GitHub integration.
 Preview URL: <https://siiatravel.vercel.app/>
-⬜ Staging indexing blocked (robots.txt + noindex on non-production)
+✅ Staging indexing blocked (meta robots noindex + robots.txt)
+“Indexing is intentionally blocked on staging until M9 domain cutover.”
 
 ### Environment decisions
 
@@ -782,7 +783,7 @@ ADR-006 — TypeScript Strict Mode
 ADR-007 — Design system locked: Light header, Navy primary UI, Green CTA (WhatsApp-first), Modern clean typography (Inter/system), Professional guide service tone.
 ADR-008 — GitHub repository visibility: Private (default)
 ADR-009 — Project specification stored in repository under /docs
-ADR-010 Until M9 cutover, staging stays on *.vercel.app and must be noindex (robots + meta)
+ADR-010 — Staging deployment on Vercel (*.vercel.app) is blocked from indexing using meta robots noindex + robots.txt until production cutover (M9)
 
 ---
 
