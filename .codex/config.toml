@@ -1,0 +1,20 @@
+# Project-scoped Codex configuration
+# Loaded only when the project is marked as trusted (Codex/VS Code).
+
+model = "gpt-5.2"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "cached"
+model_reasoning_effort = "high"
+personality = "pragmatic"
+
+[windows]
+sandbox = "elevated"
+
+[shell_environment_policy]
+# Keep this conservative. Add vars only if needed.
+include_only = ["PATH", "HOME", "USERPROFILE"]
+
+[features]
+undo = true
+shell_tool = true
