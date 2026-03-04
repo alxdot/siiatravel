@@ -8,11 +8,7 @@ export default defineConfig({
 
   trailingSlash: 'never',
 
-  output: 'hybrid',
-
-  integrations: [
-    react()
-  ],
+  integrations: [react()],
 
   adapter: vercel(),
 
