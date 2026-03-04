@@ -1,4 +1,4 @@
-# siiatravel_master_spec_v1_1
+# siiatravel_master_spec_v1_3
 
 Git + GitHub + Astro + Tailwind + TypeScript (Strict) + Sanity + Vercel
 
@@ -12,6 +12,34 @@ Launch strategy: Staging first (Vercel preview domain) → cutover to production
 Last updated: 2026-03-04
 
 ---
+
+
+## Table of Contents
+
+1. North Star
+2. Business Model
+3. Architecture Overview
+4. Infrastructure Policy
+5. Content Strategy
+6. Website Structure
+7. SEO Baseline Control System
+8. Conversion UX Rules
+9. Reviews System
+10. Tracking & Analytics
+11. Production Operations
+12. Security Policy
+13. Development Environment
+14. Development Workflow
+15. Monitoring
+16. Project File Map
+17. Milestones Roadmap
+18. Architectural Constraints
+19. Decisions Log (ADR)
+20. AI Response Directive
+21. Placeholders
+22. Design System
+23. Project AI Context Header
+
 
 ## 0) North Star
 
@@ -218,6 +246,30 @@ Alternative:
 - System fonts only (maximum resilience/performance)
 
 ### 4.5 Image pipeline (Sanity + frontend)
+
+### Image dimension standards
+
+To prevent oversized uploads and protect performance:
+
+Hero / LCP images:
+
+- Maximum width: 2400px
+- Typical width: 1600–2000px
+- Must include width + height attributes (or equivalent) to prevent CLS
+
+Content images:
+
+- Maximum width: 1600px
+
+Thumbnails / cards:
+
+- Maximum width: 800px
+
+Rules:
+
+- Do not upload raw 4000–6000px camera images.
+- Compress before upload when possible.
+
 
 - Sanity Image API can be used for convenience (`auto=format`), but do not rely on it blindly for LCP assets.
 - Enforce strict aspect ratios in CMS to prevent CLS
@@ -579,6 +631,34 @@ Verification commands:
 - git --version
 - $PSVersionTable.PSVersion
 
+
+### 13.1 Node version pinning
+
+Node version must be locked in the repository to prevent CI drift between local development and Vercel builds.
+
+Required:
+
+- `.nvmrc` (repo root) with the major version only:
+
+```
+24
+```
+
+Recommended:
+
+- `package.json` must include engines:
+
+```json
+"engines": {
+  "node": "24.x"
+}
+```
+
+Purpose:
+
+- Ensure Vercel builds use the same Node line as local.
+- Prevent accidental upgrades that break Astro/Tailwind toolchains.
+
 ### Tailwind v4 note (IMPORTANT)
 
 This project uses Tailwind v4 (current observed: v4.2.1).
@@ -590,8 +670,27 @@ This project uses Tailwind v4 (current observed: v4.2.1).
   - `@theme { --color-navy: ...; --color-primary: ...; }`
 
 ---
-
 ## 14) Development Workflow (Git → Vercel)
+
+### 14.1 Canonical build commands
+
+Development server:
+
+- `npm run dev`
+
+Production build:
+
+- `npm run build`
+
+Local production preview:
+
+- `npm run preview`
+
+Rules:
+
+- Local development and CI/CD must use these commands.
+- Vercel build step must run `npm run build`.
+
 
 1. Local development
 2. Git commit
@@ -646,6 +745,15 @@ Release rules:
 - Pages:
   - `src/pages/...` (routes follow spec §6.1)
 - Sanity Studio:
+  - Tours hub: `src/pages/tours/index.astro` (Sanity-powered)
+  - Tour detail: `src/pages/tours/[slug].astro` (Sanity-powered)
+- Portable Text renderer:
+  - `src/components/PortableTextRenderer.tsx`
+- Astro integrations:
+  - `astro.config.mjs` includes `@astrojs/react`
+- Sanity Studio schemas:
+  - `studio/schemaTypes/tour.ts`
+  - `studio/schemaTypes/index.ts`
   - studio/ (Sanity Studio app)
 
   SEO staging noindex (temporary): src/layouts/BaseLayout.astro
@@ -722,15 +830,22 @@ M2 — Sanity ready
 ✅ Dataset: production (public read)
 ✅ TypeScript enabled
 ✅ Package manager: npm
-✅ Studio dev server verified: npm run dev → http://localhost:3333/ shows “No document types” (expected)
+✅ Studio dev server verified: `npm run dev` → Studio loads locally (initially at http://localhost:3333, later used http://localhost:3334 when 3333 was busy)
+  - Initially showed “No document types” until schemas were added
 ✅ Astro env vars added to .env.local:
     PUBLIC_SANITY_PROJECT_ID=henfiqur
     PUBLIC_SANITY_DATASET=production
     PUBLIC_SANITY_API_VERSION=2023-10-01
     SANITY_API_TOKEN= (placeholder, not used yet)
 
-- ⏳ Schemas defined (TODO)
-- ⏳ Sample content created (TODO)
+✅ Studio connected to project (CORS/dev host)
+- Added development host origin for local Studio (example used): `http://localhost:3334` (Allow credentials)
+
+- ✅ Schemas defined (initial): Tour
+  - `studio/schemaTypes/tour.ts`
+  - registered in `studio/schemaTypes/index.ts`
+- ✅ Sample content created:
+  - 1 published `tour` document (used for end-to-end integration testing)
 
 M3 — Integration
 
@@ -755,13 +870,23 @@ M3 — Integration
 - src/pages/sanity-test.json.ts
   - GET /sanity-test.json
   - Query: count(*)
-  - Expected: { ok: true, count: 0, projectId, dataset }
+  - Expected: `{ ok: true, count, projectId, dataset }`
+- Before content: `count: 0`
+- After creating first Tour document: `count: 1` (local verified)
 
 ✅ Fixed Sanity image-url deprecation:
 
 - switched to createImageUrlBuilder from @sanity/image-url
 
-- ⏳ Astro pulls Tours/Services/Yachts/Helicopter/Event pages from Sanity (TODO)
+✅ Astro pulls Tours from Sanity (initial vertical)
+- Updated Tours hub to query Sanity:
+  - `src/pages/tours/index.astro`
+- Added Tour detail route (dynamic):
+  - `src/pages/tours/[slug].astro` (uses `getStaticPaths` + GROQ by slug)
+- Portable Text rendering enabled (no JSON output):
+  - Installed `@astrojs/react` + `@portabletext/react`
+  - Updated `astro.config.mjs` to enable React integration
+  - Added `src/components/PortableTextRenderer.tsx`
 
 ✅ Vercel env vars configured + deployment verified (Production + Preview):
 
@@ -864,7 +989,20 @@ ADR-013 — (2026-03-04) Astro ↔ Sanity integration completed:
 ADR-014 — (2026-03-04) Vercel env vars configured for Sanity + production connectivity verified:
     Set PUBLIC_SANITY_PROJECT_ID=henfiqur, PUBLIC_SANITY_DATASET=production, PUBLIC_SANITY_API_VERSION=2023-10-01 in Vercel (Production + Preview)
     Redeploy succeeded (green)
-    /sanity-test.json verified on https://siiatravel.vercel.app (ok:true, count:0 expected)
+    /sanity-test.json verified on https://siiatravel.vercel.app (ok:true; count depends on dataset content)
+ADR-015 — (2026-03-04) Sanity Tour schema + sample content created:
+    Added `studio/schemaTypes/tour.ts` and registered in `studio/schemaTypes/index.ts`
+    Published first `tour` document (sanity-test count became 1 locally)
+ADR-016 — (2026-03-04) Tours hub + dynamic detail pages wired to Sanity:
+    `src/pages/tours/index.astro` queries Sanity and lists tours
+    `src/pages/tours/[slug].astro` renders tour detail via slug
+ADR-017 — (2026-03-04) Portable Text rendering via React in Astro:
+    Installed `@astrojs/react` + `@portabletext/react`
+    Enabled React integration in `astro.config.mjs`
+    Added `src/components/PortableTextRenderer.tsx`
+ADR-018 — (2026-03-04) Local Studio host authorization:
+    Added development host/CORS origin for local Studio (e.g., http://localhost:3334)
+    Note: Studio may run on 3334 if 3333 is busy (Windows TIME_WAIT)
 
 ---
 
@@ -900,7 +1038,7 @@ To prevent getting stuck mid-step:
 - Vercel project URL: <https://vercel.com/alekews-7993s-projects/siiatravel>
 - Staging preview domain: <https://siiatravel.vercel.app>
 - Sanity projectId: henfiqur
-- Studio URL: <http://localhost:3333> (local dev)
+- Studio URL: <http://localhost:3333> (local dev; may use <http://localhost:3334> if port 3333 is busy)
 - Sanity Manage URL: opened via npx sanity manage
 - WhatsApp number: ________________________
 - Lead email inbox: ________________________
@@ -986,3 +1124,19 @@ Approved Tone:
 - Desktop sidebar CTA allowed on detail pages
 
 ---
+
+
+---
+
+### AI Navigation Rule
+
+When referencing this specification always cite sections by number.
+
+Examples:
+- See spec §7 SEO rules
+- See spec §4 infrastructure policy
+- See spec §17 milestones roadmap
+
+Rules:
+- Treat this document as the authoritative architecture source.
+- Do not override decisions recorded in ADR.
