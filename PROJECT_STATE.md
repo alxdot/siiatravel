@@ -11,6 +11,29 @@ Next tasks:
 - Anti-spam (honeypot + rate limit; Turnstile only if needed)
 - SSR route recommended for `/reviews`
 
+### Progress
+
+✅ Review schema implemented (Sanity document type)
+
+Files:
+- studio/schemaTypes/review.ts
+- studio/schemaTypes/index.ts
+
+Fields implemented:
+- name
+- rating
+- text
+- date (auto-filled, readOnly)
+- status (pending / approved / rejected)
+
+Preview:
+- shows reviewer name
+- rating stars
+- moderation status
+
+Status:
+M4 Step 1 complete
+
 ## Completed milestones (summary)
 - M0 ✅ Workstation ready
 - M1 ✅ Web skeleton ready
