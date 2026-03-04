@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout>
+  <Fragment slot="title">Экскурсии и услуги в Стамбуле — Siiatravel</Fragment>
+
+  <section class="max-w-6xl mx-auto px-4 py-16">
+    <h1 class="text-4xl font-semibold text-navy mb-5">
+      Экскурсии и услуги в Стамбуле
+    </h1>
+
+    <p class="text-lg text-navy/80 mb-8 max-w-2xl">
+      Частные экскурсии, яхты по Босфору, трансферы и услуги переводчика. Быстро отвечаем, работаем по вашему запросу.
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-3">
+      <a href="#" class="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:opacity-90">
+        Написать в WhatsApp
+      </a>
+      <a href="/contacts" class="border border-navy/20 px-6 py-3 rounded-lg font-medium hover:bg-black/5">
+        Оставить заявку
+      </a>
+    </div>
+  </section>
+</BaseLayout>
