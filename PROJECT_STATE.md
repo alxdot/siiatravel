@@ -1,19 +1,19 @@
 # Siiatravel — Project State
 
-Last updated: 2026-03-04
+Last updated: 2026-03-05
 
 ## Current milestone
-M4 — Reviews system (NEXT)
+M4 — Reviews system (IN PROGRESS)
 
 Next tasks:
-- Review submission form
+- Review submission form (frontend)
 - Moderation workflow (pending → approved/published OR rejected)
-- Anti-spam (honeypot + rate limit; Turnstile only if needed)
-- SSR route recommended for `/reviews`
+- SSR route for `/reviews` (recommended)
+- Optional hardening later: Turnstile only if needed (RU/BY-safe approach first)
 
 ### Progress
 
-✅ Review schema implemented (Sanity document type)
+✅ M4 Step 1 — Review schema implemented (Sanity document type)
 
 Files:
 - studio/schemaTypes/review.ts
@@ -33,6 +33,33 @@ Preview:
 
 Status:
 M4 Step 1 complete
+
+✅ M4 Step 2 — Review submission API implemented
+
+File:
+- src/pages/api/review.ts
+
+Endpoint:
+- POST `/api/review`
+
+Behavior:
+- Creates Sanity `review` documents with:
+  - status = `pending`
+  - date = current ISO datetime
+- Anti-spam:
+  - honeypot field (non-empty → silent success, no write)
+  - in-memory rate limit: 5 requests / 10 minutes per IP
+- Validation:
+  - name: min 2 chars
+  - rating: integer 1..5
+  - text: min 10 chars
+
+Security / architecture notes:
+- Uses server-only `SANITY_API_TOKEN` (write client created inside route)
+- `export const prerender = false;` required on this API route so request bodies are available (fixes “empty body” issue in static/prerender mode)
+
+Status:
+M4 Step 2 complete
 
 ## Completed milestones (summary)
 - M0 ✅ Workstation ready
@@ -56,5 +83,6 @@ M4 Step 1 complete
 - Spec: `docs/siiatravel_master_spec.md`
 - Sanity client: `src/lib/sanity.ts`
 - Tours: `src/pages/tours/index.astro`, `src/pages/tours/[slug].astro`
+- Reviews API: `src/pages/api/review.ts`
 - Portable Text: `src/components/PortableTextRenderer.tsx`
 - Studio schemas: `studio/schemaTypes/*`
