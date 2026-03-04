@@ -726,11 +726,11 @@ M2 — Sanity ready
 ✅ Astro env vars added to .env.local:
     PUBLIC_SANITY_PROJECT_ID=henfiqur
     PUBLIC_SANITY_DATASET=production
-    PUBLIC_SANITY_API_VERSION=2024-01-01
+    PUBLIC_SANITY_API_VERSION=2023-10-01
     SANITY_API_TOKEN= (placeholder, not used yet)
 
-- Schemas defined
-- Sample content created
+- ⏳ Schemas defined (TODO)
+- ⏳ Sample content created (TODO)
 
 M3 — Integration
 
