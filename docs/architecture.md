@@ -268,10 +268,15 @@ Code implementation and file editing
 
 Repository files used for AI context:
 
-AI.md
+AI_CONTEXT.md
 PROJECT_STATE.md
-docs/siiatravel_master_spec.md
-docs/ARCHITECTURE.md
+docs/master-spec.md
+CODEX_PLAYBOOK.md
+docs/architecture.md
+docs/seo-policy.md
+docs/infrastructure.md
+docs/ai-brain.md (legacy)
+AI.md (legacy)
 
 ---
 
@@ -287,7 +292,7 @@ AI agents must follow these rules:
 If conflict occurs:
 Master spec takes priority.
 
-docs/siiatravel_master_spec.md
+docs/master-spec.md
 
 ---
 

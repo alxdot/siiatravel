@@ -602,204 +602,66 @@ Release rules:
 
 ## 17) Milestones Roadmap (Execution Plan)
 
-M0 — Workstation ready
-✅ Node.js LTS installed
+### M0 — Workstation ready
+- [x] Node.js and npm installed and validated (manual).
+- [x] Git installed and identity configured (manual).
+- [x] GitHub account and private repository created (manual).
+- [x] Local workspace initialized and first push completed (manual).
+- [x] Vercel connected and first staging deploy completed (manual).
+- [x] Staging indexing blocked (`src/layouts/BaseLayout.astro`, `src/pages/robots.txt.ts`).
+- [x] Environment file structure added (`.env.example` and `.env.local` ignored).
+Notes:
+- Decision date: 2026-03-04.
+- Preview URL: <https://siiatravel.vercel.app/>.
 
-- node v24.14.0 (LTS: Krypton)
-- npm 11.9.0
-✅ Git installed (git version 2.53.0.windows.1)
-✅ Git identity configured
-- user.name = Aleksei Andreev
-- user.email = <alekews@gmail.com>
-- core.editor = VS Code
-✅ GitHub account created
-✅ GitHub repository created for siiatravel (Private)
-✅ Local repo initialized + first commit
-✅ Push to GitHub
-✅ Workspace folder created: C:\Astro\Projects\siiatravel
-✅ Astro dev server runs locally
-✅ Astro minimal + TS strict created
-✅ Tailwind added
-✅ Installed Tailwind Vite plugin dependency (@tailwindcss/vite) and verified dev server
-✅ site and trailingSlash: 'never' configured
-✅ Vercel connected to GitHub repo + first deploy (staging: siiatravel.vercel.app)
-Decision (2026-03-04):
-First successful deploy completed.
-Astro project builds automatically on Vercel via GitHub integration.
-Preview URL: <https://siiatravel.vercel.app/>
-✅ Staging indexing blocked (meta robots noindex + robots.txt)
-“Indexing is intentionally blocked on staging until M9 domain cutover.”
-✅ Env file structure added (.env.example + .env.local ignored)
+### M1 — Web skeleton ready
+- [x] Base layout with global CSS implemented (`src/layouts/BaseLayout.astro`, `src/styles/global.css`).
+- [x] Header and footer components implemented (`src/components/Header.astro`, `src/components/Footer.astro`).
+- [x] Core routes created (`src/pages/index.astro`, `src/pages/tours/index.astro`, `src/pages/yacht/index.astro`, `src/pages/interpreter/index.astro`, `src/pages/transfer/index.astro`, `src/pages/shopping/index.astro`, `src/pages/helicopter/index.astro`, `src/pages/events/index.astro`, `src/pages/blog/index.astro`, `src/pages/guide.astro`, `src/pages/reviews.astro`, `src/pages/contacts.astro`).
+- [x] Custom 404 page implemented (`src/pages/404.astro`).
 
-### Environment decisions
+### M2 — Sanity ready
+- [x] Sanity Studio initialized in-repo (`studio/`) (manual + code-verifiable).
+- [x] Sanity project and dataset configured (manual).
+- [x] Tour schema defined and registered (`studio/schemaTypes/tour.ts`, `studio/schemaTypes/index.ts`).
+- [x] Astro environment variables scaffolded for Sanity (manual).
 
-- Default terminal: PowerShell
-- Git Bash used only when a tutorial requires bash commands
+### M3 — Integration
+- [x] Sanity client packages installed and configured (`package.json`, `package-lock.json`, `src/lib/sanity.ts`).
+- [x] Sanity connectivity test route implemented (`src/pages/sanity-test.json.ts`).
+- [x] Tours hub and tour detail routes wired to Sanity (`src/pages/tours/index.astro`, `src/pages/tours/[slug].astro`).
+- [x] Portable Text rendering enabled (`astro.config.mjs`, `src/components/PortableTextRenderer.tsx`).
+- [x] Vercel Sanity environment variables configured and deployment verified (manual).
 
-### Verification commands
+### M4 — Reviews system
+- [x] Review schema implemented (`studio/schemaTypes/review.ts`).
+- [x] Review submission API implemented (`src/pages/api/review.ts`).
+- [x] Review submission UI implemented (`src/components/reviews/ReviewForm.astro`, `src/pages/index.astro`).
+- [x] Reviews listing page implemented (`src/pages/reviews.astro`).
+- [x] Unnumbered sub-step: tour page visible reviews + JSON-LD `review[]` implemented (`src/pages/tours/[slug].astro`).
 
-git --version → 2.53.0.windows.1
-git config --global --list → shows name/email/editor
-node -v → v24.14.0
-npm -v → 11.9.0
-node -p "process.release.lts" → Krypton
+### M5 — SEO foundations
+- [ ] Canonicals, redirects, sitemap, robots, Open Graph, and JSON-LD baseline finalized.
 
-M1 — Web skeleton ready ✅ (completed)
-Implemented:
+### M6 — Performance pass
+- [ ] Images, fonts, JavaScript budget, and Core Web Vitals checks finalized.
 
-- Base layout with global CSS + head slot:
-  - `src/layouts/BaseLayout.astro`
-- Header + footer components:
-  - `src/components/Header.astro`
-  - `src/components/Footer.astro`
-- Brand colors implemented via Tailwind v4 `@theme` tokens
-- Core routes created and load successfully:
-  - `/` `/tours` `/yacht` `/interpreter` `/transfer` `/shopping` `/helicopter` `/events`
-  - `/blog` `/guide` `/reviews` `/contacts`
-- Custom 404 page created:
-  - `src/pages/404.astro` (verified working via /doesnotexist)
-- Temporary WhatsApp header CTA links to `/contacts` until real WA number is set
+### M7 — Deploy staging
+- [x] Vercel staging deployment working at <https://siiatravel.vercel.app> (manual).
+- [x] GitHub to Vercel auto-deploy confirmed (manual).
+- [x] Sanity environment variables configured in Vercel (manual).
+- [x] Production redeploy verification completed (manual).
+Notes:
+- Sanity Studio remains local (`/studio`) and is not deployed to Vercel.
 
-M2 — Sanity ready
+### M8 — Content migration
+- [x] Unnumbered sub-step: CMS-driven Service Hub architecture implemented (`studio/schemaTypes/serviceHub.ts`, `src/lib/getServiceHub.ts`, `src/components/ServiceHubPage.astro`, `src/pages/interpreter/index.astro`, `src/pages/yacht/index.astro`, `src/pages/transfer/index.astro`, `src/pages/shopping/index.astro`, `src/pages/helicopter/index.astro`, `src/pages/events/index.astro`, `src/pages/guide.astro`).
+- [ ] All target pages migrated.
+- [ ] Redirect map implemented and tested.
 
-✅ Sanity Studio created inside repo: C:\Astro\Projects\siiatravel\studio
-✅ Logged in via Sanity CLI
-✅ Project created: siiatravel
-✅ Organization created: Personal
-✅ Dataset: production (public read)
-✅ TypeScript enabled
-✅ Package manager: npm
-✅ Studio dev server verified: `npm run dev` → Studio loads locally (initially at http://localhost:3333, later used http://localhost:3334 when 3333 was busy)
-  - Initially showed “No document types” until schemas were added
-✅ Astro env vars added to .env.local:
-    PUBLIC_SANITY_PROJECT_ID=henfiqur
-    PUBLIC_SANITY_DATASET=production
-    PUBLIC_SANITY_API_VERSION=2023-10-01
-    SANITY_API_TOKEN= (placeholder, not used yet)
-
-✅ Studio connected to project (CORS/dev host)
-- Added development host origin for local Studio (example used): `http://localhost:3334` (Allow credentials)
-
-- ✅ Schemas defined (initial): Tour
-  - `studio/schemaTypes/tour.ts`
-  - registered in `studio/schemaTypes/index.ts`
-- ✅ Sample content created:
-  - 1 published `tour` document (used for end-to-end integration testing)
-
-M3 — Integration
-
-✅ Installed Sanity packages in Astro:
-
-- @sanity/client
-- groq
-- @sanity/image-url
-
-✅ Created Sanity client wrapper:
-
-- src/lib/sanity.ts
-  - sanityClient configured via import.meta.env:
-    - PUBLIC_SANITY_PROJECT_ID
-    - PUBLIC_SANITY_DATASET
-    - PUBLIC_SANITY_API_VERSION
-  - useCdn: true
-  - urlFor helper for images
-
-✅ Added test endpoint to verify GROQ connectivity:
-
-- src/pages/sanity-test.json.ts
-  - GET /sanity-test.json
-  - Query: count(*)
-  - Expected: `{ ok: true, count, projectId, dataset }`
-- Before content: `count: 0`
-- After creating first Tour document: `count: 1` (local verified)
-
-✅ Fixed Sanity image-url deprecation:
-
-- switched to createImageUrlBuilder from @sanity/image-url
-
-✅ Astro pulls Tours from Sanity (initial vertical)
-- Updated Tours hub to query Sanity:
-  - `src/pages/tours/index.astro`
-- Added Tour detail route (dynamic):
-  - `src/pages/tours/[slug].astro` (uses `getStaticPaths` + GROQ by slug)
-- Portable Text rendering enabled (no JSON output):
-  - Installed `@astrojs/react` + `@portabletext/react`
-  - Updated `astro.config.mjs` to enable React integration
-  - Added `src/components/PortableTextRenderer.tsx`
-
-✅ Vercel env vars configured + deployment verified (Production + Preview):
-
-- Added Vercel Environment Variables:
-  - PUBLIC_SANITY_PROJECT_ID=henfiqur
-  - PUBLIC_SANITY_DATASET=production
-  - PUBLIC_SANITY_API_VERSION=2023-10-01
-- Triggered Production redeploy → Status: Ready (green)
-- Verified deployed endpoint:
-  - https://siiatravel.vercel.app/sanity-test.json → { ok:true, count:0, projectId:"henfiqur", dataset:"production" } (count=0 expected until docs exist)
-
-
-M4 — Reviews system
-
-### Implementation progress
-
-M4 Step 1 — Review schema (Sanity) ✅
-File: `studio/schemaTypes/review.ts`
-
-M4 Step 2 — Review submission API (Astro endpoint) ✅
-File: `src/pages/api/review.ts`
-
-Endpoint:
-POST `/api/review`
-
-Features:
-- accepts JSON
-- honeypot spam protection
-- validation
-- creates review in Sanity
-- default status = `pending`
-
-Deployment:
-Working on Vercel production
-
-- Submission → moderation → publish
-- Anti-spam controls
-
-M5 — SEO foundations
-
-- Canonicals, redirects, sitemap, robots, OG, JSON-LD
-
-M6 — Performance pass
-
-- Images, fonts, JS budget, CWV checks
-
-M7 — Deploy staging
-
-✅ Vercel staging deploy working (preview domain):
-- Preview/Production domain: https://siiatravel.vercel.app
-- Auto-deploy GitHub → Vercel confirmed
-
-✅ Environment Variables configured in Vercel (Production + Preview):
-- PUBLIC_SANITY_PROJECT_ID=henfiqur
-- PUBLIC_SANITY_DATASET=production
-- PUBLIC_SANITY_API_VERSION=2023-10-01
-
-✅ Production redeploy verified green:
-- Build + deploy status: Ready
-- Deployed Sanity connectivity test:
-  - /sanity-test.json returns ok:true (count:0 expected until content exists)
-
-⚠️ Note:
-- Sanity Studio is local at /studio (http://localhost:3333). It is not deployed to Vercel.
-
-M8 — Content migration
-
-- All pages migrated
-- Redirect map implemented and tested
-
-M9 — Production cutover
-
-- Domain switch
-- Indexing & monitoring verification
+### M9 — Production cutover
+- [ ] Domain switch executed.
+- [ ] Indexing and monitoring verification completed.
 
 ---
 

@@ -3,172 +3,81 @@
 Last updated: 2026-03-05
 
 ## Current milestone
-M7 — CMS-driven Service Hub architecture (COMPLETE)
+M5 — SEO foundations
 
-Next milestone:
-- M8 — FAQ schema + structured data (JSON-LD)
+## Next milestone
+M6 — Performance pass
 
-Recently completed:
-- M7 — CMS-driven Service Hub architecture (COMPLETE)
-- Sanity schema: serviceHub
-- CMS documents created for service hubs
-- getServiceHub() data helper implemented
-- ServiceHubPage reusable Astro component
-- All hub routes refactored to CMS-driven content:
-  - /interpreter
-  - /yacht
-  - /transfer
-  - /shopping
-  - /helicopter
-  - /events
-  - /guide
-- M6 — Tour page visible reviews + JSON-LD review[] (COMPLETE)
+## Milestones (aligned with `docs/master-spec.md` §17)
 
-M6 checklist:
-- M6-1 Strict normalization/filtering for approved tour reviews [COMPLETE]
-- M6-2 Render visible "Отзывы" block on /tours/[slug] [COMPLETE]
-- M6-3 Extend JSON-LD to include review[] and match visible reviews [COMPLETE]
-- M6-4 Validate again in Rich Results Test [COMPLETE]
+### M0 — Workstation ready
+- [x] Node.js and npm installed and validated (manual).
+- [x] Git installed and identity configured (manual).
+- [x] GitHub account and repository setup completed (manual).
+- [x] Local repository initialized and pushed (manual).
+- [x] Vercel project connected and first deploy completed (manual).
+- [x] Environment file structure created (`.env.example`, `.env.local` ignored).
+Notes:
+- Manual setup confirmations are tracked in the historical setup logs in `docs/master-spec.md` §17.
 
-M6 verification:
-- Google Rich Results Test (code mode) detects valid Product snippets + Review snippets
-- review[] JSON-LD mirrors the visible reviews on the same tour page
+### M1 — Web skeleton ready
+- [x] Base layout implemented (`src/layouts/BaseLayout.astro`).
+- [x] Shared header and footer implemented (`src/components/Header.astro`, `src/components/Footer.astro`).
+- [x] Core top-level routes implemented (`src/pages/index.astro`, `src/pages/tours/index.astro`, `src/pages/yacht/index.astro`, `src/pages/interpreter/index.astro`, `src/pages/transfer/index.astro`, `src/pages/shopping/index.astro`, `src/pages/helicopter/index.astro`, `src/pages/events/index.astro`, `src/pages/blog/index.astro`, `src/pages/guide.astro`, `src/pages/reviews.astro`, `src/pages/contacts.astro`).
+- [x] Custom 404 page implemented (`src/pages/404.astro`).
+Notes:
+- Legacy completion markers were normalized to strict task-list format on 2026-03-05.
 
-### Progress
+### M2 — Sanity ready
+- [x] Sanity Studio initialized in-repo (`studio/`) (manual + code-verifiable).
+- [x] Tour schema registered (`studio/schemaTypes/tour.ts`, `studio/schemaTypes/index.ts`).
+- [x] Astro environment variables configured for Sanity (manual).
+Notes:
+- Login, organization, project, and dataset setup are manual operations.
 
-✅ M4 Step 1 — Review schema implemented (Sanity document type)
+### M3 — Integration
+- [x] Sanity client wrapper implemented (`src/lib/sanity.ts`).
+- [x] Tours hub integrated with Sanity (`src/pages/tours/index.astro`).
+- [x] Tour detail route integrated with Sanity (`src/pages/tours/[slug].astro`).
+- [x] Portable Text rendering implemented (`src/components/PortableTextRenderer.tsx`).
+Notes:
+- Vercel environment-variable verification remains manual.
 
-Files:
-- studio/schemaTypes/review.ts
-- studio/schemaTypes/index.ts
+### M4 — Reviews system
+- [x] Review schema implemented (`studio/schemaTypes/review.ts`).
+- [x] Review submission API implemented (`src/pages/api/review.ts`).
+- [x] Review form mounted on homepage (`src/components/reviews/ReviewForm.astro`, `src/pages/index.astro`).
+- [x] Reviews listing page implemented (`src/pages/reviews.astro`).
+- [x] Tour page visible reviews + JSON-LD `review[]` implemented (`src/pages/tours/[slug].astro`).
+Notes:
+- Legacy mislabeled item `M6 — Tour page visible reviews + JSON-LD review[]` is tracked as an unnumbered completed sub-step under M4.
 
-Fields implemented:
-- name
-- rating
-- text
-- date (auto-filled, readOnly)
-- status (pending / approved / rejected)
+### M5 — SEO foundations
+- [ ] Canonicals, redirects, sitemap, robots, Open Graph, and JSON-LD baseline fully finalized.
+- [ ] FAQ schema rollout finalized where applicable.
+Notes:
+- Active milestone.
 
-Preview:
-- shows reviewer name
-- rating stars
-- moderation status
+### M6 — Performance pass
+- [ ] Image and font optimization pass finalized.
+- [ ] JavaScript budget review and Core Web Vitals verification finalized.
 
-Status:
-M4 Step 1 complete
+### M7 — Deploy staging
+- [x] Staging deployment on Vercel verified (manual).
+- [x] Preview auto-deploy from GitHub verified (manual).
+- [x] Required Sanity environment variables set in Vercel (manual).
 
+### M8 — Content migration
+- [x] Unnumbered sub-step: CMS-driven Service Hub architecture implemented (`src/components/ServiceHubPage.astro`, `src/lib/getServiceHub.ts`, `studio/schemaTypes/serviceHub.ts`, `src/pages/interpreter/index.astro`, `src/pages/yacht/index.astro`, `src/pages/transfer/index.astro`, `src/pages/shopping/index.astro`, `src/pages/helicopter/index.astro`, `src/pages/events/index.astro`, `src/pages/guide.astro`).
+- [ ] All target pages migrated.
+- [ ] Redirect map implemented and tested.
+Notes:
+- Legacy mislabeled item `M7 — CMS-driven Service Hub architecture` is tracked under M8 without changing M0-M9 meanings.
 
-✅ M4 Step 2 — Review submission API implemented
-
-File:
-- src/pages/api/review.ts
-
-Endpoint:
-- POST `/api/review`
-
-Behavior:
-- Creates Sanity `review` documents with:
-  - status = `pending`
-  - date = current ISO datetime
-- Anti-spam:
-  - honeypot field (non-empty → silent success, no write)
-  - in-memory rate limit: 5 requests / 10 minutes per IP
-- Validation:
-  - name: min 2 chars
-  - rating: integer 1..5
-  - text: min 10 chars
-
-Security / architecture notes:
-- Uses server-only `SANITY_API_TOKEN` (write client created inside route)
-- `export const prerender = false;` required on this API route so request bodies are available (fixes “empty body” issue in static/prerender mode)
-
-Status:
-M4 Step 2 complete
-
-
-✅ M4 Step 2.5 — Review subject linking implemented
-
-Files:
-- studio/schemaTypes/review.ts
-- src/pages/api/review.ts
-
-Purpose:
-Prepare the review system for **future SEO rich snippets** and **entity-specific reviews** without needing data migration later.
-
-Schema additions:
-- subjectType: `company | tour | service` (default: `company`)
-- tour: reference to `tour` (visible only when subjectType = `tour`)
-- service: enum (visible only when subjectType = `service`)
-
-Service enum values:
-- yacht
-- transfer
-- guide
-- interpreter
-- helicopter
-- shopping
-- other
-
-API behavior:
-- All new reviews are currently created with: subjectType = "company"
-
-This keeps behavior identical to previous versions while enabling
-future UI support for tour/service reviews.
-
-Status:
-M4 Step 2.5 complete
-
-✅ M4 Step 3 — Review submission UI implemented
-
-Files:
-- src/components/reviews/ReviewForm.astro
-- src/pages/index.astro (form mounted + latest reviews preview + link to `/reviews`)
-
-Behavior:
-- Homepage includes review submission form (`POST /api/review`)
-- Homepage shows "Последние отзывы" (latest 3 approved reviews)
-- Homepage includes "Все отзывы →" link to `/reviews`
-
-Status:
-M4 Step 3 complete
-
-
-✅ M4 Step 4 — Reviews listing page implemented
-
-File:
-- src/pages/reviews.astro
-
-Behavior:
-- Displays only reviews with `status == "approved"`
-- Sorted by `date desc` (newest first)
-
-Status:
-M4 Step 4 complete
-
-### Moderation workflow
-
-- New reviews are created with `status = "pending"`.
-- In Sanity Studio, an editor should set status to:
-  - `approved` — displayed publicly on `/reviews` and homepage preview
-  - `rejected` — never displayed
-- Moderation guidance:
-  - never approve reviews containing links/spam
-  - keep reviewer name reasonable
-  - fix obvious typos only if desired
-- UI submission is live on the homepage and sends reviews to `POST /api/review`.
-
-
----
-
-## Completed milestones (summary)
-
-- M0 ✅ Workstation ready
-- M1 ✅ Web skeleton ready
-- M2 ✅ Sanity ready (Studio in `/studio`, dataset `production`, projectId `henfiqur`)
-- M3 ✅ Astro ↔ Sanity integration for Tours (hub + detail via slug)
-
-
----
+### M9 — Production cutover
+- [ ] Domain cutover executed.
+- [ ] Staging `noindex` removed for production.
+- [ ] Production indexing and monitoring verification completed.
 
 ## Key decisions (high impact)
 
@@ -187,22 +96,16 @@ Architecture decisions:
   - forms must work without blocked services
 - LCP images served **locally** (avoid runtime Sanity CDN dependency)
 
-
----
-
 ## Known constraints
 
 - No heavy frontend frameworks
 - Minimal hydration only
 - Staging environment must be **noindex** until production cutover
 
-
----
-
 ## Key files (quick pointers)
 
 Spec:
-- `docs/siiatravel_master_spec.md`
+- `docs/master-spec.md`
 
 Sanity client:
 - `src/lib/sanity.ts`
