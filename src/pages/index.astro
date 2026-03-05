@@ -1,6 +1,44 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ReviewForm from "../components/reviews/ReviewForm.astro";
+import { sanityClient } from "../lib/sanity";
+
+type ReviewPreview = {
+  name: string;
+  rating?: unknown;
+  text: string;
+  date?: string;
+};
+
+const latestReviews: ReviewPreview[] = await sanityClient.fetch(`
+  *[_type == "review" && status == "approved"] | order(date desc)[0...3] {
+    name,
+    rating,
+    text,
+    date
+  }
+`);
+
+const safeRating = (value: unknown) => {
+  const numeric = typeof value === "number" ? value : Number(value);
+  const integer = Number.isFinite(numeric) ? Math.trunc(numeric) : 1;
+  return Math.min(5, Math.max(1, integer));
+};
+
+const stars = (rating: number) => `${"★".repeat(rating)}${"☆".repeat(5 - rating)}`;
+
+const formatRuDate = (value?: string) => {
+  if (!value) return "";
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return "";
+  return parsed.toLocaleDateString("ru-RU");
+};
+
+const previewText = (value: string, maxLength = 180) => {
+  const trimmed = value.trim();
+  if (trimmed.length <= maxLength) return trimmed;
+  return `${trimmed.slice(0, maxLength).trimEnd()}…`;
+};
 ---
 
 <BaseLayout>
@@ -26,6 +64,36 @@ import ReviewForm from "../components/reviews/ReviewForm.astro";
   </section>
 
   <section class="my-12">
+    {latestReviews.length > 0 && (
+      <div class="mx-auto mb-10 max-w-6xl px-4">
+        <h2 class="mb-5 text-2xl font-semibold text-slate-900">Последние отзывы</h2>
+        <ul class="grid gap-4 md:grid-cols-3">
+          {latestReviews.map((review) => {
+            const rating = safeRating(review.rating);
+
+            return (
+              <li class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <p class="text-lg leading-none text-amber-500" aria-label={`Оценка: ${rating} из 5`}>
+                  {stars(rating)}
+                </p>
+                <h3 class="mt-3 text-base font-semibold text-slate-900">{review.name}</h3>
+                <p class="mt-2 text-sm text-slate-700">{previewText(review.text)}</p>
+                <p class="mt-3 text-sm text-slate-600">{formatRuDate(review.date)}</p>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    )}
+
     <ReviewForm />
+    <div class="mt-6 text-center">
+      <a
+        href="/reviews"
+        class="text-sm font-medium text-slate-900 underline underline-offset-4 hover:text-slate-700"
+      >
+        Все отзывы →
+      </a>
+    </div>
   </section>
 </BaseLayout>
