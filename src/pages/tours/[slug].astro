@@ -146,7 +146,7 @@ function formatReviewDate(dateISO: string | null): string | null {
 const siteOrigin = (Astro.site?.toString() ?? Astro.url.origin).replace(/\/$/, "");
 const tourUrl = `${siteOrigin}/tours/${slug}`;
 const tourImage = tour.heroImage ? urlFor(tour.heroImage).width(1200).url() : undefined;
-const reviewsJsonLd = buildReviewsJsonLd({
+const reviewsJsonLdBase = buildReviewsJsonLd({
   name: tour.title,
   url: tourUrl,
   ...(tourImage ? { image: tourImage } : {}),
@@ -156,6 +156,24 @@ const reviewsJsonLd = buildReviewsJsonLd({
     reviewCount,
   },
 });
+const reviewsJsonLd =
+  reviewsJsonLdBase && approvedTourReviews.length > 0
+    ? {
+        ...reviewsJsonLdBase,
+        review: approvedTourReviews.map((review) => ({
+          "@type": "Review",
+          author: { "@type": "Person", name: review.name },
+          reviewRating: {
+            "@type": "Rating",
+            ratingValue: review.rating,
+            bestRating: 5,
+            worstRating: 1,
+          },
+          reviewBody: review.text,
+          ...(review.dateISO ? { datePublished: review.dateISO } : {}),
+        })),
+      }
+    : reviewsJsonLdBase;
 ---
 
 <BaseLayout>
