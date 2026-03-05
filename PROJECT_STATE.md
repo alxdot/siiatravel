@@ -3,14 +3,26 @@
 Last updated: 2026-03-05
 
 ## Current milestone
-M6 — Tour page visible reviews + JSON-LD review[] (COMPLETE)
+M7 — CMS-driven Service Hub architecture (COMPLETE)
 
-Next tasks:
-- Optional hardening later: Turnstile only if needed (RU/BY-safe approach first)
+Next milestone:
+- M8 — FAQ schema + structured data (JSON-LD)
 
 Recently completed:
-- M5 — Review SEO schema / JSON-LD (COMPLETE)
-- Rich Results Test: valid Product + Review snippets confirmed via CODE test (URL crawl was blocked)
+- M7 — CMS-driven Service Hub architecture (COMPLETE)
+- Sanity schema: serviceHub
+- CMS documents created for service hubs
+- getServiceHub() data helper implemented
+- ServiceHubPage reusable Astro component
+- All hub routes refactored to CMS-driven content:
+  - /interpreter
+  - /yacht
+  - /transfer
+  - /shopping
+  - /helicopter
+  - /events
+  - /guide
+- M6 — Tour page visible reviews + JSON-LD review[] (COMPLETE)
 
 M6 checklist:
 - M6-1 Strict normalization/filtering for approved tour reviews [COMPLETE]
