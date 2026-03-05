@@ -1,17 +1,59 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { sanityClient } from "../../lib/sanity";
+import PortableTextRenderer from "../../components/PortableTextRenderer";
+
+type ServiceHubPage = {
+  title: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  body: unknown[];
+};
+
+const serviceHub: ServiceHubPage | null = await sanityClient.fetch(
+  `
+  *[_type == "serviceHub" && slug.current == "interpreter"][0]{
+    title,
+    seoTitle,
+    seoDescription,
+    body
+  }
+`
+);
+
+const pageTitle = serviceHub?.seoTitle || serviceHub?.title || "Переводчик в Стамбуле — Siiatravel";
+const pageDescription =
+  serviceHub?.seoDescription ||
+  "Услуги переводчика в Стамбуле для бизнеса, медицины и сопровождения переговоров.";
 ---
 
 <BaseLayout>
   <Fragment slot="head">
-    <title>Переводчик в Стамбуле — Siiatravel</title>
-    <meta name="description" content="Услуги переводчика в Стамбуле: бизнес, выставки, медицина, юрист, поиск поставщиков. Быстро отвечаем в WhatsApp." />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
   </Fragment>
 
-  <section class="max-w-6xl mx-auto px-4 py-16">
-    <h1 class="text-3xl font-semibold text-navy mb-4">Переводчик в Стамбуле</h1>
-    <p class="text-navy/80 max-w-2xl">
-      Страница-заготовка. На этапе Sanity добавим 5 подстраниц и связанный контент.
-    </p>
+  <section class="max-w-4xl mx-auto px-4 py-16">
+    {serviceHub ? (
+      <>
+        <h1 class="text-3xl font-semibold text-navy mb-6">{serviceHub.title}</h1>
+        {serviceHub.body?.length ? (
+          <div class="prose prose-lg max-w-none">
+            <PortableTextRenderer value={serviceHub.body} />
+          </div>
+        ) : (
+          <p class="text-navy/80">
+            Контент ещё не заполнен. Добавьте документ Service Hub (slug: interpreter) в Sanity Studio.
+          </p>
+        )}
+      </>
+    ) : (
+      <>
+        <h1 class="text-3xl font-semibold text-navy mb-4">Переводчик в Стамбуле</h1>
+        <p class="text-navy/80">
+          Контент ещё не заполнен. Добавьте документ Service Hub (slug: interpreter) в Sanity Studio.
+        </p>
+      </>
+    )}
   </section>
 </BaseLayout>
