@@ -1,12 +1,74 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { sanityClient } from "../lib/sanity";
+
+type Review = {
+  name: string;
+  rating?: unknown;
+  text: string;
+  date?: string;
+  subjectType?: "company" | "tour" | "service";
+  status: "pending" | "approved" | "rejected";
+};
+
+const reviews: Review[] = await sanityClient.fetch(`
+  *[_type == "review" && status == "approved"] | order(date desc) {
+    name,
+    rating,
+    text,
+    date,
+    subjectType,
+    status
+  }
+`);
+
+const formatRuDate = (value?: string) => {
+  if (!value) return "";
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return "";
+  return parsed.toLocaleDateString("ru-RU");
+};
+
+const stars = (rating: number) => {
+  const safe = Number.isInteger(rating) ? Math.min(5, Math.max(1, rating)) : 1;
+  return `${"★".repeat(safe)}${"☆".repeat(5 - safe)}`;
+};
+
+const safeRating = (value: unknown) => {
+  const numeric = typeof value === "number" ? value : Number(value);
+  const integer = Number.isFinite(numeric) ? Math.trunc(numeric) : 1;
+  return Math.min(5, Math.max(1, integer));
+};
 ---
 
 <BaseLayout>
-  <Fragment slot="title">Заголовок — Отзывы</Fragment>
+  <Fragment slot="title">Отзывы — Siiatravel</Fragment>
 
   <section class="max-w-6xl mx-auto px-4 py-16">
-    <h1 class="text-3xl font-semibold text-navy mb-4">Отзывы</h1>
-    <p class="text-navy/80">Страница-заготовка. Контент подключим из Sanity на M3.</p>
+    <h1 class="mb-6 text-3xl font-semibold text-slate-900">Отзывы</h1>
+
+    {reviews.length === 0 ? (
+      <p class="max-w-2xl text-slate-700">Пока нет опубликованных отзывов.</p>
+    ) : (
+      <ul class="space-y-4">
+        {reviews.map((review) => {
+          const rating = safeRating(review.rating);
+
+          return (
+            <li class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <p class="text-lg leading-none text-amber-500" aria-label={`Оценка: ${rating} из 5`}>
+                  {stars(rating)}
+                </p>
+                <p class="text-sm text-slate-600">{formatRuDate(review.date)}</p>
+              </div>
+
+              <h2 class="mt-3 text-base font-semibold text-slate-900">{review.name}</h2>
+              <p class="mt-2 whitespace-pre-line text-slate-700">{review.text}</p>
+            </li>
+          );
+        })}
+      </ul>
+    )}
   </section>
 </BaseLayout>
