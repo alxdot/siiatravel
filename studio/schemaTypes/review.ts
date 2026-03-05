@@ -9,6 +9,7 @@ export const review = defineType({
   initialValue: {
     status: 'pending',
     date: new Date().toISOString(),
+    subjectType: 'company',
   },
 
   fields: [
@@ -35,6 +36,47 @@ export const review = defineType({
       rows: 4,
       description: 'Review content shown on the site.',
       validation: (Rule) => Rule.required().min(10),
+    }),
+
+    defineField({
+      name: 'subjectType',
+      title: 'Review subject',
+      type: 'string',
+      options: {
+        layout: 'radio',
+        list: [
+          {title: 'Company', value: 'company'},
+          {title: 'Tour', value: 'tour'},
+          {title: 'Service', value: 'service'},
+        ],
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+
+    defineField({
+      name: 'tour',
+      title: 'Tour',
+      type: 'reference',
+      to: [{type: 'tour'}],
+      hidden: ({document}) => document?.subjectType !== 'tour',
+    }),
+
+    defineField({
+      name: 'service',
+      title: 'Service',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Yacht', value: 'yacht'},
+          {title: 'Transfer', value: 'transfer'},
+          {title: 'Guide', value: 'guide'},
+          {title: 'Interpreter', value: 'interpreter'},
+          {title: 'Helicopter', value: 'helicopter'},
+          {title: 'Shopping', value: 'shopping'},
+          {title: 'Other', value: 'other'},
+        ],
+      },
+      hidden: ({document}) => document?.subjectType !== 'service',
     }),
 
     // ✅ Only ONE "date" field

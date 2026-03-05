@@ -162,6 +162,7 @@ export const ALL: APIRoute = async ({ request }) => {
       text,
       date: new Date().toISOString(),
       status: "pending",
+      subjectType: "company",
     });
 
     return json({ ok: true }, 201);
