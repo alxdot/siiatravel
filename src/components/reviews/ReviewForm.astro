@@ -1,0 +1,271 @@
+---
+const uid =
+  globalThis.crypto?.randomUUID?.() ??
+  `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+---
+
+<section class="mx-auto w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+  <h2 class="text-2xl font-semibold text-slate-900">Оставить отзыв</h2>
+
+  <form data-review-form class="mt-6 space-y-5" novalidate>
+    <div>
+      <label for={`review-name-${uid}`} class="mb-2 block text-sm font-medium text-slate-800">Имя</label>
+      <input
+        id={`review-name-${uid}`}
+        name="name"
+        type="text"
+        required
+        minlength="2"
+        placeholder="Ваше имя"
+        aria-describedby={`review-name-error-${uid}`}
+        class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-slate-900 placeholder:text-slate-400 focus:border-slate-900 focus:outline-none"
+      />
+      <p id={`review-name-error-${uid}`} data-error="name" class="mt-1 text-sm text-red-600" hidden></p>
+    </div>
+
+    <fieldset>
+      <legend class="mb-2 block text-sm font-medium text-slate-800">Оценка</legend>
+      <div class="flex items-center gap-3" role="radiogroup" aria-labelledby={`review-rating-legend-${uid}`}>
+        <span id={`review-rating-legend-${uid}`} class="sr-only">Оценка от 1 до 5</span>
+        <label class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-800 hover:border-slate-500 focus-within:border-slate-900">
+          <input type="radio" name="rating" value="1" aria-describedby={`review-rating-error-${uid}`} />
+          <span>1</span>
+        </label>
+        <label class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-800 hover:border-slate-500 focus-within:border-slate-900">
+          <input type="radio" name="rating" value="2" aria-describedby={`review-rating-error-${uid}`} />
+          <span>2</span>
+        </label>
+        <label class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-800 hover:border-slate-500 focus-within:border-slate-900">
+          <input type="radio" name="rating" value="3" aria-describedby={`review-rating-error-${uid}`} />
+          <span>3</span>
+        </label>
+        <label class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-800 hover:border-slate-500 focus-within:border-slate-900">
+          <input type="radio" name="rating" value="4" aria-describedby={`review-rating-error-${uid}`} />
+          <span>4</span>
+        </label>
+        <label class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-800 hover:border-slate-500 focus-within:border-slate-900">
+          <input type="radio" name="rating" value="5" aria-describedby={`review-rating-error-${uid}`} />
+          <span>5</span>
+        </label>
+      </div>
+      <p id={`review-rating-error-${uid}`} data-error="rating" class="mt-1 text-sm text-red-600" hidden></p>
+    </fieldset>
+
+    <div>
+      <label for={`review-text-${uid}`} class="mb-2 block text-sm font-medium text-slate-800">Отзыв</label>
+      <textarea
+        id={`review-text-${uid}`}
+        name="text"
+        required
+        minlength="10"
+        rows="5"
+        placeholder="Ваш отзыв"
+        aria-describedby={`review-text-error-${uid}`}
+        class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-slate-900 placeholder:text-slate-400 focus:border-slate-900 focus:outline-none"
+      ></textarea>
+      <p id={`review-text-error-${uid}`} data-error="text" class="mt-1 text-sm text-red-600" hidden></p>
+    </div>
+
+    <div class="sr-only" aria-hidden="true">
+      <label for={`review-website-${uid}`}>Website</label>
+      <input id={`review-website-${uid}`} name="website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <p data-review-success class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700" hidden>
+      Спасибо! Ваш отзыв отправлен на модерацию.
+    </p>
+    <p data-review-error class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" hidden></p>
+
+    <button
+      type="submit"
+      data-submit-button
+      class="inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+    >
+      Отправить отзыв
+    </button>
+  </form>
+</section>
+
+<script>
+  const forms = document.querySelectorAll('[data-review-form]');
+
+  for (const formElement of forms) {
+    if (!(formElement instanceof HTMLFormElement)) continue;
+
+    const form = formElement;
+    const submitButton = form.querySelector('[data-submit-button]');
+    const successMessage = form.querySelector('[data-review-success]');
+    const errorMessage = form.querySelector('[data-review-error]');
+
+    const nameInput = form.elements.namedItem('name');
+    const textInput = form.elements.namedItem('text');
+    const honeypotInput = form.elements.namedItem('website');
+    const ratingInputs = Array.from(form.querySelectorAll('input[name="rating"]'));
+
+    const nameError = form.querySelector('[data-error="name"]');
+    const ratingError = form.querySelector('[data-error="rating"]');
+    const textError = form.querySelector('[data-error="text"]');
+
+    const GENERIC_ERROR = 'Не удалось отправить отзыв. Попробуйте позже.';
+    const SUBMIT_LABEL = 'Отправить отзыв';
+    const SUBMITTING_LABEL = 'Отправка...';
+
+    let isSubmitting = false;
+
+    const setFormState = (state, message = '') => {
+      if (submitButton instanceof HTMLButtonElement) {
+        submitButton.disabled = state === 'submitting';
+        submitButton.textContent = state === 'submitting' ? SUBMITTING_LABEL : SUBMIT_LABEL;
+      }
+
+      if (successMessage instanceof HTMLElement) {
+        successMessage.hidden = state !== 'success';
+      }
+
+      if (errorMessage instanceof HTMLElement) {
+        errorMessage.hidden = state !== 'error';
+        errorMessage.textContent = state === 'error' ? message : '';
+      }
+    };
+
+    const setNameError = (message) => {
+      if (!(nameInput instanceof HTMLInputElement) || !(nameError instanceof HTMLElement)) return;
+      const hasError = Boolean(message);
+      nameInput.setAttribute('aria-invalid', hasError ? 'true' : 'false');
+      nameError.hidden = !hasError;
+      nameError.textContent = message;
+    };
+
+    const setRatingError = (message) => {
+      if (!(ratingError instanceof HTMLElement)) return;
+      const hasError = Boolean(message);
+      for (const input of ratingInputs) {
+        if (input instanceof HTMLInputElement) {
+          input.setAttribute('aria-invalid', hasError ? 'true' : 'false');
+        }
+      }
+      ratingError.hidden = !hasError;
+      ratingError.textContent = message;
+    };
+
+    const setTextError = (message) => {
+      if (!(textInput instanceof HTMLTextAreaElement) || !(textError instanceof HTMLElement)) return;
+      const hasError = Boolean(message);
+      textInput.setAttribute('aria-invalid', hasError ? 'true' : 'false');
+      textError.hidden = !hasError;
+      textError.textContent = message;
+    };
+
+    const clearFieldErrors = () => {
+      setNameError('');
+      setRatingError('');
+      setTextError('');
+    };
+
+    const getSelectedRating = () => {
+      const selected = form.querySelector('input[name="rating"]:checked');
+      if (!(selected instanceof HTMLInputElement)) return null;
+      const value = Number.parseInt(selected.value, 10);
+      return Number.isInteger(value) ? value : null;
+    };
+
+    const validate = () => {
+      clearFieldErrors();
+
+      let isValid = true;
+
+      const name = nameInput instanceof HTMLInputElement ? nameInput.value.trim() : '';
+      const text = textInput instanceof HTMLTextAreaElement ? textInput.value.trim() : '';
+      const rating = getSelectedRating();
+
+      if (name.length < 2) {
+        setNameError('Введите имя не короче 2 символов.');
+        isValid = false;
+      }
+
+      if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+        setRatingError('Выберите оценку от 1 до 5.');
+        isValid = false;
+      }
+
+      if (text.length < 10) {
+        setTextError('Введите отзыв не короче 10 символов.');
+        isValid = false;
+      }
+
+      return isValid;
+    };
+
+    setFormState('idle');
+    clearFieldErrors();
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      if (isSubmitting) return;
+
+      setFormState('idle');
+
+      const honeypotValue = honeypotInput instanceof HTMLInputElement ? honeypotInput.value.trim() : '';
+      if (honeypotValue.length > 0) {
+        setFormState('error', GENERIC_ERROR);
+        return;
+      }
+
+      if (!validate()) {
+        setFormState('idle');
+        return;
+      }
+
+      const name = nameInput instanceof HTMLInputElement ? nameInput.value.trim() : '';
+      const text = textInput instanceof HTMLTextAreaElement ? textInput.value.trim() : '';
+      const rating = getSelectedRating();
+
+      if (!Number.isInteger(rating)) {
+        setFormState('idle');
+        setRatingError('Выберите оценку от 1 до 5.');
+        return;
+      }
+
+      isSubmitting = true;
+      setFormState('submitting');
+
+      try {
+        const response = await fetch('/api/review', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name,
+            rating,
+            text,
+          }),
+        });
+
+        let serverMessage = '';
+
+        try {
+          const data = await response.clone().json();
+          if (data && typeof data.message === 'string' && data.message.trim()) {
+            serverMessage = data.message.trim();
+          }
+        } catch {
+          // Ignore non-JSON responses.
+        }
+
+        if (response.ok) {
+          form.reset();
+          clearFieldErrors();
+          setFormState('success');
+        } else {
+          setFormState('error', serverMessage || GENERIC_ERROR);
+        }
+      } catch {
+        setFormState('error', GENERIC_ERROR);
+      } finally {
+        isSubmitting = false;
+      }
+    });
+  }
+</script>
