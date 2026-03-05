@@ -1,42 +1,12 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getServiceHub } from "../../lib/getServiceHub";
-import PortableTextRenderer from "../../components/PortableTextRenderer";
-const serviceHub = await getServiceHub("shopping");
-
-const pageTitle = serviceHub?.seoTitle || serviceHub?.title || "Шоппинг в Стамбуле — Siiatravel";
-const pageDescription =
-  serviceHub?.seoDescription ||
-  "Шоппинг в Стамбуле с сопровождением: помощь с маршрутами, магазинами и покупками.";
+import ServiceHubPage from "../../components/ServiceHubPage.astro";
 ---
 
 <BaseLayout>
-  <Fragment slot="head">
-    <title>{pageTitle}</title>
-    <meta name="description" content={pageDescription} />
-  </Fragment>
-
-  <section class="max-w-4xl mx-auto px-4 py-16">
-    {serviceHub ? (
-      <>
-        <h1 class="text-3xl font-semibold text-navy mb-6">{serviceHub.title}</h1>
-        {serviceHub.body?.length ? (
-          <div class="prose prose-lg max-w-none">
-            <PortableTextRenderer value={serviceHub.body} />
-          </div>
-        ) : (
-          <p class="text-navy/80">
-            Контент ещё не заполнен. Добавьте документ Service Hub (slug: shopping) в Sanity Studio.
-          </p>
-        )}
-      </>
-    ) : (
-      <>
-        <h1 class="text-3xl font-semibold text-navy mb-4">Шоппинг в Стамбуле</h1>
-        <p class="text-navy/80">
-          Контент ещё не заполнен. Добавьте документ Service Hub (slug: shopping) в Sanity Studio.
-        </p>
-      </>
-    )}
-  </section>
+  <ServiceHubPage
+    slug="shopping"
+    fallbackTitle="Шоппинг в Стамбуле — Siiatravel"
+    fallbackDescription="Шоппинг в Стамбуле с сопровождением: помощь с маршрутами, магазинами и покупками."
+  />
 </BaseLayout>

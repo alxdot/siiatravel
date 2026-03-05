@@ -1,42 +1,12 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getServiceHub } from "../../lib/getServiceHub";
-import PortableTextRenderer from "../../components/PortableTextRenderer";
-const serviceHub = await getServiceHub("transfer");
-
-const pageTitle = serviceHub?.seoTitle || serviceHub?.title || "Трансфер в Стамбуле — Siiatravel";
-const pageDescription =
-  serviceHub?.seoDescription ||
-  "Трансфер в Стамбуле: аэропорт IST и Сабиха Гёкчен (SAW). Надёжно, быстро отвечаем.";
+import ServiceHubPage from "../../components/ServiceHubPage.astro";
 ---
 
 <BaseLayout>
-  <Fragment slot="head">
-    <title>{pageTitle}</title>
-    <meta name="description" content={pageDescription} />
-  </Fragment>
-
-  <section class="max-w-4xl mx-auto px-4 py-16">
-    {serviceHub ? (
-      <>
-        <h1 class="text-3xl font-semibold text-navy mb-6">{serviceHub.title}</h1>
-        {serviceHub.body?.length ? (
-          <div class="prose prose-lg max-w-none">
-            <PortableTextRenderer value={serviceHub.body} />
-          </div>
-        ) : (
-          <p class="text-navy/80">
-            Контент ещё не заполнен. Добавьте документ Service Hub (slug: transfer) в Sanity Studio.
-          </p>
-        )}
-      </>
-    ) : (
-      <>
-        <h1 class="text-3xl font-semibold text-navy mb-4">Трансфер в Стамбуле</h1>
-        <p class="text-navy/80">
-          Контент ещё не заполнен. Добавьте документ Service Hub (slug: transfer) в Sanity Studio.
-        </p>
-      </>
-    )}
-  </section>
+  <ServiceHubPage
+    slug="transfer"
+    fallbackTitle="Трансфер в Стамбуле — Siiatravel"
+    fallbackDescription="Трансфер в Стамбуле: аэропорт IST и Сабиха Гёкчен (SAW). Надёжно, быстро отвечаем."
+  />
 </BaseLayout>
