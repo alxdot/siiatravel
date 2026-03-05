@@ -3,12 +3,10 @@
 Last updated: 2026-03-05
 
 ## Current milestone
-M4 — Reviews system (IN PROGRESS)
+M4 — Reviews system (COMPLETE)
 
 Next tasks:
-- M4 Step 3 — Review submission form (frontend)
-- Moderation workflow (pending → approved/published OR rejected)
-- SSR route for `/reviews` (recommended)
+- M5 — Review SEO schema / JSON-LD
 - Optional hardening later: Turnstile only if needed (RU/BY-safe approach first)
 
 ### Progress
@@ -94,6 +92,45 @@ future UI support for tour/service reviews.
 
 Status:
 M4 Step 2.5 complete
+
+✅ M4 Step 3 — Review submission UI implemented
+
+Files:
+- src/components/reviews/ReviewForm.astro
+- src/pages/index.astro (form mounted + latest reviews preview + link to `/reviews`)
+
+Behavior:
+- Homepage includes review submission form (`POST /api/review`)
+- Homepage shows "Последние отзывы" (latest 3 approved reviews)
+- Homepage includes "Все отзывы →" link to `/reviews`
+
+Status:
+M4 Step 3 complete
+
+
+✅ M4 Step 4 — Reviews listing page implemented
+
+File:
+- src/pages/reviews.astro
+
+Behavior:
+- Displays only reviews with `status == "approved"`
+- Sorted by `date desc` (newest first)
+
+Status:
+M4 Step 4 complete
+
+### Moderation workflow
+
+- New reviews are created with `status = "pending"`.
+- In Sanity Studio, an editor should set status to:
+  - `approved` — displayed publicly on `/reviews` and homepage preview
+  - `rejected` — never displayed
+- Moderation guidance:
+  - never approve reviews containing links/spam
+  - keep reviewer name reasonable
+  - fix obvious typos only if desired
+- UI submission is live on the homepage and sends reviews to `POST /api/review`.
 
 
 ---
