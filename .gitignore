@@ -3,6 +3,9 @@ dist/
 # generated types
 .astro/
 
+#Vercel build output / local cache
+.vercel/
+
 # dependencies
 node_modules/
 
@@ -25,3 +28,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+#VS Code settings (optional but recommended)
+.vscode/

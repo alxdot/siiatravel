@@ -71,9 +71,12 @@ const visibleAverageRating = averageRating.toFixed(1);
 
 const siteOrigin = (Astro.site?.toString() ?? Astro.url.origin).replace(/\/$/, "");
 const tourUrl = `${siteOrigin}/tours/${slug}`;
+const tourImage = tour.heroImage ? urlFor(tour.heroImage).width(1200).url() : undefined;
 const reviewsJsonLd = buildReviewsJsonLd({
   name: tour.title,
   url: tourUrl,
+  ...(tourImage ? { image: tourImage } : {}),
+  ...(tour.excerpt ? { description: tour.excerpt } : {}),
   aggregate: {
     ratingValue: averageRating,
     reviewCount,
