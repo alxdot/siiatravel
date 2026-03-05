@@ -3,11 +3,21 @@
 Last updated: 2026-03-05
 
 ## Current milestone
-M4 — Reviews system (COMPLETE)
+M6 — Tour page visible reviews + JSON-LD review[] (IN PROGRESS)
 
 Next tasks:
-- M5 — Review SEO schema / JSON-LD
+- M6 — Tour page visible reviews + JSON-LD review[]
 - Optional hardening later: Turnstile only if needed (RU/BY-safe approach first)
+
+Recently completed:
+- M5 — Review SEO schema / JSON-LD (COMPLETE)
+- Rich Results Test: valid Product + Review snippets confirmed via CODE test (URL crawl was blocked)
+
+M6 checklist:
+- M6-1 Fetch approved tour reviews (full fields) [IN PROGRESS]
+- M6-2 Render reviews block on /tours/[slug]
+- M6-3 Extend JSON-LD to include review[]
+- M6-4 Validate again in Rich Results Test
 
 ### Progress
 

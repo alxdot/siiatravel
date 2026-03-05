@@ -386,6 +386,7 @@ Optional:
 ### 9.4 SEO note
 
 Only mark up reviews that are visible on the page.
+For tour pages, `review[]` JSON-LD must correspond to reviews visibly rendered on that same tour page.
 
 ---
 

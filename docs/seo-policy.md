@@ -46,6 +46,8 @@ Experiences/services:
 Reviews:
 
 - Mark up only reviews that are real and visible on the page
+- On tour pages, `review[]` JSON-LD is allowed only when those reviews are visibly rendered on the same page.
+- JSON-LD review entries must match visible review content.
 
 ### 7.4 Internal linking
 
