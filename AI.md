@@ -34,12 +34,12 @@ Primary conversion hierarchy:
 - INP < 200ms
 
 ## Documentation
-- Master spec: `docs/siiatravel_master_spec.md`
+- Master spec: `docs/master-spec.md`
 - State: `PROJECT_STATE.md`
-- AI brain: `docs/siiatravel_ai_brain.md`
+- AI brain: `docs/ai-brain.md`
 
 If instructions conflict:
-1) Follow `docs/siiatravel_master_spec.md`
+1) Follow `docs/master-spec.md`
 2) Then `PROJECT_STATE.md`
 3) Then this file (`AI.md`)
 

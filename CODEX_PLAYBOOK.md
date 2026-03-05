@@ -3,7 +3,7 @@
 ## Always start sessions with this checklist
 1) Read: AI.md
 2) Read: PROJECT_STATE.md
-3) If a rule exists, follow master spec: docs/siiatravel_master_spec.md
+3) If a rule exists, follow master spec: docs/master-spec.md
 
 ## Safe default prompt (copy/paste)
 You are Codex working in the Siiatravel repo.
