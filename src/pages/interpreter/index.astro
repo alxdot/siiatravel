@@ -1,25 +1,8 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { sanityClient } from "../../lib/sanity";
+import { getServiceHub } from "../../lib/getServiceHub";
 import PortableTextRenderer from "../../components/PortableTextRenderer";
-
-type ServiceHubPage = {
-  title: string;
-  seoTitle?: string;
-  seoDescription?: string;
-  body: unknown[];
-};
-
-const serviceHub: ServiceHubPage | null = await sanityClient.fetch(
-  `
-  *[_type == "serviceHub" && slug.current == "interpreter"][0]{
-    title,
-    seoTitle,
-    seoDescription,
-    body
-  }
-`
-);
+const serviceHub = await getServiceHub("interpreter");
 
 const pageTitle = serviceHub?.seoTitle || serviceHub?.title || "Переводчик в Стамбуле — Siiatravel";
 const pageDescription =
