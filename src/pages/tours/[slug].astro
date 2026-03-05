@@ -48,26 +48,100 @@ if (!tour) {
   return Astro.redirect("/404");
 }
 
-type TourReview = { rating?: unknown };
+type RawTourReview = {
+  name?: unknown;
+  rating?: unknown;
+  text?: unknown;
+  date?: unknown;
+};
 
-const approvedTourReviews: TourReview[] = await sanityClient.fetch(
-  `
-  *[_type == "review" && status == "approved" && subjectType == "tour" && tour._ref == $tourId]{
-    rating
+type NormalizedReview = {
+  name: string;
+  rating: number;
+  text: string;
+  dateISO: string | null;
+};
+
+function isNonEmptyString(v: unknown): v is string {
+  return typeof v === "string" && v.trim().length > 0;
+}
+
+function parseRating(v: unknown): number | null {
+  let numericValue: number;
+
+  if (typeof v === "number") {
+    numericValue = v;
+  } else if (typeof v === "string") {
+    const trimmed = v.trim();
+    if (trimmed.length === 0) return null;
+    numericValue = Number(trimmed);
+  } else {
+    return null;
   }
+
+  if (!Number.isInteger(numericValue)) return null;
+  if (numericValue < 1 || numericValue > 5) return null;
+  return numericValue;
+}
+
+function normalizeDateISO(v: unknown): string | null {
+  if (typeof v !== "string") return null;
+  const trimmed = v.trim();
+  if (trimmed.length === 0) return null;
+  return Number.isNaN(Date.parse(trimmed)) ? null : trimmed;
+}
+
+const rawApprovedTourReviews: RawTourReview[] = await sanityClient.fetch(
+  `
+  *[_type == "review" && status == "approved" && subjectType == "tour" && tour._ref == $tourId]
+    | order(date desc)[0...10]{
+      name,
+      rating,
+      text,
+      date
+    }
 `,
   { tourId: tour._id }
 );
 
-const normalizedRatings = approvedTourReviews
-  .map((review) => (typeof review.rating === "number" ? review.rating : Number(review.rating)))
-  .filter((rating) => Number.isFinite(rating))
-  .map((rating) => Math.min(5, Math.max(1, rating as number)));
+const approvedTourReviews: NormalizedReview[] = rawApprovedTourReviews
+  .map((review): NormalizedReview | null => {
+    if (!isNonEmptyString(review.name) || !isNonEmptyString(review.text)) return null;
 
-const reviewCount = normalizedRatings.length;
+    const rating = parseRating(review.rating);
+    if (rating === null) return null;
+
+    return {
+      name: review.name.trim(),
+      rating,
+      text: review.text.trim(),
+      dateISO: normalizeDateISO(review.date),
+    };
+  })
+  .filter((review): review is NormalizedReview => review !== null);
+
+const reviewCount = approvedTourReviews.length;
 const averageRating =
-  reviewCount > 0 ? normalizedRatings.reduce((sum, rating) => sum + rating, 0) / reviewCount : 0;
+  reviewCount > 0
+    ? approvedTourReviews.reduce((sum, review) => sum + review.rating, 0) / reviewCount
+    : 0;
 const visibleAverageRating = averageRating.toFixed(1);
+const reviewDateFormatter = new Intl.DateTimeFormat("ru-RU", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+});
+
+function renderStars(rating: number): string {
+  return `${"★".repeat(rating)}${"☆".repeat(5 - rating)}`;
+}
+
+function formatReviewDate(dateISO: string | null): string | null {
+  if (!dateISO) return null;
+  const parsed = new Date(dateISO);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return reviewDateFormatter.format(parsed);
+}
 
 const siteOrigin = (Astro.site?.toString() ?? Astro.url.origin).replace(/\/$/, "");
 const tourUrl = `${siteOrigin}/tours/${slug}`;
@@ -139,6 +213,33 @@ const reviewsJsonLd = buildReviewsJsonLd({
       </div>
     ) : (
       <p class="text-navy/80 mt-8">Описание скоро будет.</p>
+    )}
+
+    {approvedTourReviews.length > 0 && (
+      <section aria-labelledby="reviews-heading" class="mt-12 border-t border-navy/10 pt-8">
+        <h2 id="reviews-heading" class="text-2xl font-semibold text-navy">
+          Отзывы
+        </h2>
+        <p class="mt-2 text-sm text-navy/80">
+          Средняя оценка {visibleAverageRating} · {reviewCount} отзыв(ов)
+        </p>
+
+        <ul class="mt-6 divide-y divide-navy/10">
+          {approvedTourReviews.map((review) => {
+            const formattedDate = formatReviewDate(review.dateISO);
+            return (
+              <li class="py-5 first:pt-0 last:pb-0">
+                <p class="text-base font-medium text-navy">{review.name}</p>
+                <p class="mt-1 text-sm text-navy/80">{renderStars(review.rating)}</p>
+                <p class="mt-3 text-base leading-7 text-navy/90">{review.text}</p>
+                {formattedDate && (
+                  <p class="mt-2 text-xs text-navy/60">{formattedDate}</p>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </section>
     )}
   </section>
 </BaseLayout>
