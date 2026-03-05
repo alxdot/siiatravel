@@ -1,0 +1,45 @@
+---
+import { getServiceHub } from "../lib/getServiceHub";
+import PortableTextRenderer from "./PortableTextRenderer";
+
+type Props = {
+  slug: string;
+  fallbackTitle: string;
+  fallbackDescription: string;
+};
+
+const { slug, fallbackTitle, fallbackDescription } = Astro.props as Props;
+const serviceHub = await getServiceHub(slug);
+
+const pageTitle = serviceHub?.seoTitle || serviceHub?.title || fallbackTitle;
+const pageDescription = serviceHub?.seoDescription || fallbackDescription;
+---
+
+<Fragment slot="head">
+  <title>{pageTitle}</title>
+  <meta name="description" content={pageDescription} />
+</Fragment>
+
+<section class="max-w-4xl mx-auto px-4 py-16">
+  {serviceHub ? (
+    <>
+      <h1 class="text-3xl font-semibold text-navy mb-6">{serviceHub.title}</h1>
+      {serviceHub.body?.length ? (
+        <div class="prose prose-lg max-w-none">
+          <PortableTextRenderer value={serviceHub.body} />
+        </div>
+      ) : (
+        <p class="text-navy/80">
+          Контент ещё не заполнен. Добавьте документ Service Hub (slug: {slug}) в Sanity Studio.
+        </p>
+      )}
+    </>
+  ) : (
+    <>
+      <h1 class="text-3xl font-semibold text-navy mb-4">{fallbackTitle}</h1>
+      <p class="text-navy/80">
+        Контент ещё не заполнен. Добавьте документ Service Hub (slug: {slug}) в Sanity Studio.
+      </p>
+    </>
+  )}
+</section>
