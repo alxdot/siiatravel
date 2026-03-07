@@ -1,19 +1,129 @@
-<header class="bg-white border-b border-black/10">
-  <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-    <a href="/" class="text-xl font-semibold text-navy">
-      Siiatravel
-    </a>
+---
+const primaryLinks = [
+  { href: "/tours", label: "Экскурсии" },
+  { href: "/yacht", label: "Яхты" },
+  { href: "/guide", label: "Гид" },
+  { href: "/interpreter", label: "Переводчик" },
+  { href: "/transfer", label: "Трансфер" },
+  { href: "/shopping", label: "Шопинг" },
+  { href: "/helicopter", label: "Вертолет" },
+  { href: "/events", label: "Мероприятия" },
+];
 
-    <nav class="hidden md:flex gap-6 text-navy">
-      <a href="/tours" class="hover:opacity-80">Экскурсии</a>
-      <a href="/yacht" class="hover:opacity-80">Яхты</a>
-      <a href="/interpreter" class="hover:opacity-80">Переводчик</a>
-      <a href="/transfer" class="hover:opacity-80">Трансфер</a>
-      <a href="/contacts" class="hover:opacity-80">Контакты</a>
+const secondaryLinks = [
+  { href: "/blog", label: "Блог" },
+  { href: "/reviews", label: "Отзывы" },
+  { href: "/contacts", label: "Контакты" },
+];
+---
+
+<header class="border-b border-black/10 bg-white">
+  <div class="mx-auto max-w-6xl px-4">
+    <div class="flex h-16 items-center justify-between gap-3">
+      <a href="/" class="text-xl font-semibold tracking-tight text-navy">
+        Siiatravel
+      </a>
+
+      <div class="hidden md:flex items-center gap-6">
+        <nav aria-label="Дополнительная навигация" class="flex items-center gap-5 text-sm text-navy">
+          {secondaryLinks.map((link) => (
+            <a href={link.href} class="font-medium transition-opacity hover:opacity-75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
+              {link.label}
+            </a>
+          ))}
+        </nav>
+
+        <a
+          href="https://wa.me/XXXXXXXXXXXX"
+          rel="nofollow"
+          class="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          aria-label="Связаться в WhatsApp"
+        >
+          WhatsApp
+        </a>
+      </div>
+
+      <div class="flex items-center gap-2 md:hidden">
+        <a
+          href="https://wa.me/XXXXXXXXXXXX"
+          rel="nofollow"
+          class="inline-flex items-center rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          aria-label="Связаться в WhatsApp"
+        >
+          WhatsApp
+        </a>
+
+        <button
+          id="mobile-menu-button"
+          type="button"
+          class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-black/15 text-navy transition-colors hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          aria-expanded="false"
+          aria-controls="mobile-menu-panel"
+          aria-label="Открыть меню навигации"
+        >
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <nav aria-label="Основная навигация" class="hidden md:flex items-center gap-6 border-t border-black/10 py-3 text-sm text-navy">
+      {primaryLinks.map((link) => (
+        <a href={link.href} class="font-medium transition-opacity hover:opacity-75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
+          {link.label}
+        </a>
+      ))}
     </nav>
 
-    <a href="/contacts" class="bg-primary text-white px-4 py-2 rounded-lg font-medium hover:opacity-90">
-      WhatsApp
-    </a>
+    <div id="mobile-menu-panel" class="border-t border-black/10 py-4 md:hidden" hidden>
+      <nav aria-label="Мобильная навигация" class="space-y-4">
+        <div class="space-y-1">
+          {primaryLinks.map((link) => (
+            <a href={link.href} class="block rounded-lg px-2 py-2 text-base font-medium text-navy transition-colors hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
+              {link.label}
+            </a>
+          ))}
+        </div>
+
+        <div class="border-t border-black/10 pt-3">
+          {secondaryLinks.map((link) => (
+            <a href={link.href} class="block rounded-lg px-2 py-2 text-sm font-medium text-navy/90 transition-colors hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
+              {link.label}
+            </a>
+          ))}
+        </div>
+      </nav>
+    </div>
   </div>
 </header>
+
+<script is:inline>
+  const menuButton = document.getElementById("mobile-menu-button");
+  const menuPanel = document.getElementById("mobile-menu-panel");
+
+  if (menuButton && menuPanel) {
+    const setOpen = (isOpen) => {
+      menuButton.setAttribute("aria-expanded", String(isOpen));
+      menuButton.setAttribute("aria-label", isOpen ? "Закрыть меню навигации" : "Открыть меню навигации");
+      menuPanel.hidden = !isOpen;
+    };
+
+    const closeMenu = () => setOpen(false);
+
+    menuButton.addEventListener("click", () => {
+      const isExpanded = menuButton.getAttribute("aria-expanded") === "true";
+      setOpen(!isExpanded);
+    });
+
+    menuPanel.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", closeMenu);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeMenu();
+      }
+    });
+  }
+</script>
