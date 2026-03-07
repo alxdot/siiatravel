@@ -1,0 +1,52 @@
+---
+import Container from "../ui/Container.astro";
+import Breadcrumbs from "./Breadcrumbs.astro";
+
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  title: string;
+  imageSrc: string;
+  imageAlt: string;
+  intro?: string;
+  rating?: number;
+  reviewsCount?: number;
+  breadcrumbs?: BreadcrumbItem[];
+  class?: string;
+}
+
+const {
+  title,
+  imageSrc,
+  imageAlt,
+  intro,
+  rating,
+  reviewsCount,
+  breadcrumbs,
+  class: className,
+} = Astro.props as Props;
+
+const ratingText =
+  rating !== undefined
+    ? `⭐ ${rating}${reviewsCount !== undefined ? ` (${reviewsCount} reviews)` : ""}`
+    : null;
+---
+
+<section class:list={["py-12 md:py-16", className]}>
+  <Container>
+    {breadcrumbs && breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
+
+    <h1 class="text-3xl font-semibold tracking-tight text-navy md:text-4xl">{title}</h1>
+
+    {ratingText && <p class="mt-3 text-sm text-navy/70">{ratingText}</p>}
+
+    {intro && <p class="mt-4 max-w-2xl text-navy/80">{intro}</p>}
+
+    <div class="mt-8 aspect-[16/9]">
+      <img src={imageSrc} alt={imageAlt} class="h-full w-full rounded-xl object-cover" />
+    </div>
+  </Container>
+</section>
