@@ -845,6 +845,165 @@ Approved Tone:
 - Sticky mobile WhatsApp CTA allowed
 - Desktop sidebar CTA allowed on detail pages
 
+## 22.6 Frontend System Architecture
+
+The frontend must follow a reusable component-based architecture built with Astro and Tailwind.
+
+Goals:
+
+- Maintain visual consistency across all service and tour pages
+- Prevent design drift as the site scales
+- Keep performance high and JavaScript minimal
+- Avoid CMS-driven layout chaos
+
+### 22.6.1 Component System
+
+The UI must be built from reusable components and blocks.
+
+Preferred structure:
+
+```text
+src/components/
+  layout/
+  ui/
+  blocks/
+  seo/
+```
+
+Categories:
+
+Layout
+
+- Header
+- Footer
+- Mobile navigation
+- Global layout wrapper
+
+UI primitives
+
+- Button
+- SectionHeading
+- Badge
+- Container
+- Stars
+- PriceTag
+
+Blocks
+
+Reusable page sections:
+
+- Hero
+- ImageText
+- ServicesGrid
+- TourCard
+- YachtCard
+- ReviewSection
+- FAQSection
+- CTASection
+- LeadForm
+- GalleryStrip
+- Breadcrumbs
+
+Rules:
+
+- Avoid page-specific hardcoded layouts when a reusable block is possible.
+- Prefer composable sections instead of monolithic page templates.
+
+### 22.6.2 CMS vs Presentation Responsibility
+
+Clear separation must be preserved:
+
+Sanity CMS controls:
+
+- Content
+- Text
+- Images
+- Structured content blocks
+- Limited layout variants
+
+Astro + Tailwind control:
+
+- Layout
+- Spacing
+- Typography
+- Visual hierarchy
+- Responsive behavior
+- Image rendering
+- Section composition
+
+The CMS must not become a visual design tool.
+
+### 22.6.3 Controlled CMS Variants
+
+When layout options are needed, they must be controlled enums.
+
+Examples:
+
+```text
+variant: primary | secondary | luxury
+theme: light | dark | brand
+alignment: left | center
+imagePosition: left | right
+```
+
+Rules:
+
+- No freeform styling fields in CMS.
+- Editors should not control margins, padding, or colors.
+
+### 22.6.4 Template Strategy
+
+Pages should be built using shared templates.
+
+Core templates:
+
+- Homepage
+- Tours listing
+- Tour detail
+- Service hub pages
+- Blog article
+- Contact page
+
+Each template should be composed from reusable blocks.
+
+### 22.6.5 UI Library Policy
+
+The project must prioritize a custom component system.
+
+Allowed:
+
+- Astro components
+- Tailwind CSS utilities
+- Small helper libraries when justified
+
+Avoid:
+
+- heavy UI kits
+- template frameworks
+- component libraries that dictate design
+
+Examples to avoid unless justified:
+
+- Tailwind Plus
+- Flowbite
+- large design systems
+
+### 22.6.6 Visual Direction
+
+The website must feel:
+
+- premium
+- editorial
+- photo-driven
+- calm and trustworthy
+- conversion-focused
+
+Avoid:
+
+- generic SaaS dashboard styling
+- template-looking layouts
+- overly animated UI
+
 ---
 
 ## 23) Future improvement:
