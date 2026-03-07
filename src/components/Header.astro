@@ -1,5 +1,6 @@
 ---
 import Container from "./ui/Container.astro";
+import Button from "./ui/Button.astro";
 
 const primaryLinks = [
   { href: "/tours", label: "Экскурсии" },
@@ -44,25 +45,27 @@ const isLinkActive = (href: string) => {
           ))}
         </nav>
 
-        <a
+        <Button
           href="https://wa.me/XXXXXXXXXXXX"
+          variant="primary"
           rel="nofollow"
-          class="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          class="text-sm font-semibold"
           aria-label="Связаться в WhatsApp"
         >
           WhatsApp
-        </a>
+        </Button>
       </div>
 
       <div class="flex items-center gap-2 md:hidden">
-        <a
+        <Button
           href="https://wa.me/XXXXXXXXXXXX"
+          variant="primary"
           rel="nofollow"
-          class="inline-flex items-center rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          class="text-sm font-semibold"
           aria-label="Связаться в WhatsApp"
         >
           WhatsApp
-        </a>
+        </Button>
 
         <button
           id="mobile-menu-button"
