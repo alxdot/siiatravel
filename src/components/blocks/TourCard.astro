@@ -1,0 +1,39 @@
+---
+import Button from "../ui/Button.astro";
+
+interface Props {
+  title: string;
+  imageSrc: string;
+  imageAlt: string;
+  description?: string;
+  price?: string;
+  href: string;
+  class?: string;
+}
+
+const {
+  title,
+  imageSrc,
+  imageAlt,
+  description,
+  price,
+  href,
+  class: className,
+} = Astro.props as Props;
+---
+
+<article class:list={["overflow-hidden rounded-xl border border-black/10 bg-white", className]}>
+  <div class="aspect-[4/3]">
+    <img src={imageSrc} alt={imageAlt} class="w-full object-cover" />
+  </div>
+
+  <div class="p-5">
+    <h3 class="text-lg font-semibold tracking-tight text-navy">{title}</h3>
+    {description && <p class="mt-2 text-sm text-navy/70">{description}</p>}
+
+    <div class="mt-4 flex items-center justify-between gap-3">
+      {price && <p class="text-sm font-medium text-navy">{price}</p>}
+      <Button href={href} variant="secondary">Подробнее</Button>
+    </div>
+  </div>
+</article>
