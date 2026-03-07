@@ -1,0 +1,42 @@
+---
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props as Props;
+---
+
+<nav aria-label="Breadcrumb" class:list={["mb-6 text-sm text-navy/70", className]}>
+  <ol class="flex flex-wrap items-center gap-2">
+    {
+      items.map((item, index) => {
+        const isLast = index === items.length - 1;
+
+        return (
+          <>
+            <li>
+              {!isLast && item.href ? (
+                <a href={item.href} class="hover:underline">
+                  {item.label}
+                </a>
+              ) : (
+                <span aria-current={isLast ? "page" : undefined}>{item.label}</span>
+              )}
+            </li>
+            {!isLast && (
+              <li aria-hidden="true" class="text-navy/40">
+                /
+              </li>
+            )}
+          </>
+        );
+      })
+    }
+  </ol>
+</nav>
