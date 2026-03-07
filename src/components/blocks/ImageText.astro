@@ -1,0 +1,49 @@
+---
+import Container from "../ui/Container.astro";
+import Button from "../ui/Button.astro";
+
+interface Props {
+  imageSrc: string;
+  imageAlt: string;
+  title?: string;
+  text?: string;
+  buttonText?: string;
+  buttonHref?: string;
+  reverse?: boolean;
+  class?: string;
+}
+
+const {
+  imageSrc,
+  imageAlt,
+  title,
+  text,
+  buttonText,
+  buttonHref,
+  reverse = false,
+  class: className,
+} = Astro.props as Props;
+---
+
+<section class:list={["py-16 md:py-20", className]}>
+  <Container>
+    <div class="grid items-center gap-10 md:grid-cols-2">
+      <div class:list={[reverse && "md:order-2"]}>
+        <img src={imageSrc} alt={imageAlt} class="w-full rounded-xl object-cover" />
+      </div>
+
+      <div class:list={[reverse && "md:order-1"]}>
+        {title && <h2 class="text-2xl font-semibold tracking-tight text-navy">{title}</h2>}
+        {text && <p class="mt-4 text-navy/80">{text}</p>}
+        {
+          buttonText &&
+            buttonHref && (
+              <div class="mt-6">
+                <Button href={buttonHref} variant="primary">{buttonText}</Button>
+              </div>
+            )
+        }
+      </div>
+    </div>
+  </Container>
+</section>
