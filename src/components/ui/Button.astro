@@ -1,0 +1,40 @@
+---
+type Variant = "primary" | "secondary" | "link";
+type ButtonType = "button" | "submit";
+
+interface Props {
+  variant?: Variant;
+  href?: string;
+  type?: ButtonType;
+  class?: string;
+}
+
+const {
+  variant = "primary",
+  href,
+  type = "button",
+  class: className,
+  ...attrs
+} = Astro.props as Props;
+
+const baseClasses =
+  "inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy/40 focus-visible:ring-offset-2";
+
+const variantClasses: Record<Variant, string> = {
+  primary: "bg-navy text-white hover:bg-navy/90",
+  secondary: "border border-black/15 text-black hover:bg-black/5",
+  link: "px-0 py-0 text-navy hover:underline",
+};
+---
+
+{
+  href ? (
+    <a href={href} class:list={[baseClasses, variantClasses[variant], className]} {...attrs}>
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class:list={[baseClasses, variantClasses[variant], className]} {...attrs}>
+      <slot />
+    </button>
+  )
+}
