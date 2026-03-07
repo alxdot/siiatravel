@@ -1,0 +1,32 @@
+---
+import Container from "../ui/Container.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import Button from "../ui/Button.astro";
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  buttonText: string;
+  buttonHref: string;
+  class?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  description,
+  buttonText,
+  buttonHref,
+  class: className,
+} = Astro.props as Props;
+---
+
+<section class:list={["py-16 md:py-20", className]}>
+  <Container>
+    <SectionHeading eyebrow={eyebrow} title={title} description={description} align="center" />
+    <div class="mt-8 flex justify-center">
+      <Button href={buttonHref} variant="primary">{buttonText}</Button>
+    </div>
+  </Container>
+</section>
