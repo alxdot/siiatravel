@@ -1,12 +1,18 @@
 # Siiatravel — Project State
 
-Last updated: 2026-03-05
+Last updated: 2026-03-07
 
 ## Current milestone
-M5 — SEO foundations
+M5 — SEO foundations (reusable frontend system foundation established)
 
 ## Next milestone
 M6 — Performance pass
+
+## Recently completed
+
+- Shared shell standardization: global header/navigation + footer, with Header/Footer wrapper width/gutters unified through `Container`, and header WhatsApp CTA moved to `Button`.
+- UI primitives implemented in `src/components/ui`: `Container.astro`, `Button.astro`, `SectionHeading.astro`.
+- Reusable blocks implemented in `src/components/blocks`: `CTASection.astro`, `ImageText.astro`, `TourCard.astro`, `TourGrid.astro`, `Breadcrumbs.astro`, `TourHero.astro`.
 
 ## Milestones (aligned with `docs/master-spec.md` §17)
 
@@ -25,6 +31,7 @@ Notes:
 - [x] Shared header and footer implemented (`src/components/Header.astro`, `src/components/Footer.astro`).
 - [x] Core top-level routes implemented (`src/pages/index.astro`, `src/pages/tours/index.astro`, `src/pages/yacht/index.astro`, `src/pages/interpreter/index.astro`, `src/pages/transfer/index.astro`, `src/pages/shopping/index.astro`, `src/pages/helicopter/index.astro`, `src/pages/events/index.astro`, `src/pages/blog/index.astro`, `src/pages/guide.astro`, `src/pages/reviews.astro`, `src/pages/contacts.astro`).
 - [x] Custom 404 page implemented (`src/pages/404.astro`).
+- [x] Unnumbered sub-step: reusable frontend system foundation implemented (`src/components/ui/Container.astro`, `src/components/ui/Button.astro`, `src/components/ui/SectionHeading.astro`, `src/components/blocks/CTASection.astro`, `src/components/blocks/ImageText.astro`, `src/components/blocks/TourCard.astro`, `src/components/blocks/TourGrid.astro`, `src/components/blocks/Breadcrumbs.astro`, `src/components/blocks/TourHero.astro`).
 Notes:
 - Legacy completion markers were normalized to strict task-list format on 2026-03-05.
 

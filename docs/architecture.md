@@ -1,7 +1,7 @@
 
 # Siiatravel — System Architecture
 
-Last updated: 2026-03-04
+Last updated: 2026-03-07
 
 This document describes the technical architecture of the Siiatravel website.
 It exists to help developers and AI agents (Codex / ChatGPT) understand the system quickly.
@@ -322,6 +322,37 @@ Project documentation
 
 .codex/
 Codex configuration
+
+---
+
+# 15. Frontend Component Architecture (Implemented)
+
+The frontend now follows a reusable component system under `src/components/` with a clear primitive/block split.
+
+Current structure:
+
+`src/components/ui`
+- `Container.astro` — shared width/gutter primitive for shell and content wrappers.
+- `Button.astro` — reusable CTA primitive (anchor/button usage with variants).
+- `SectionHeading.astro` — reusable heading stack (eyebrow, title, description).
+
+`src/components/blocks`
+- `CTASection.astro` — centered conversion section with heading + primary CTA.
+- `ImageText.astro` — editorial two-column image/text section with optional CTA.
+- `TourCard.astro` — reusable tour listing card.
+- `TourGrid.astro` — responsive grid for `TourCard` items.
+- `Breadcrumbs.astro` — reusable breadcrumb navigation.
+- `TourHero.astro` — tour page hero with optional breadcrumbs, rating, intro, and image.
+
+Shared shell alignment:
+
+- `Header.astro` and `Footer.astro` use `Container` for consistent width/gutters.
+- Header WhatsApp CTA uses the shared `Button` primitive.
+
+Direction:
+
+- Keep using Astro + Tailwind with static-first rendering.
+- Build pages from reusable blocks and keep visual rules in primitives to prevent design drift.
 
 ---
 

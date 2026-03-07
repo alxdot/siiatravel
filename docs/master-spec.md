@@ -9,7 +9,7 @@ Primary language: RU (only, for now)
 Region constraint: Must work reliably in Russia & Belarus
 Business type: Istanbul travel experiences & services — lead generation
 Launch strategy: Staging first (Vercel preview domain) → cutover to production domain after full validation
-Last updated: 2026-03-04
+Last updated: 2026-03-07
 
 ---
 
@@ -581,6 +581,15 @@ Release rules:
 - Shared UI:
   - `src/components/Header.astro` — shared global header with desktop navigation, mobile menu, and WhatsApp CTA
   - `src/components/Footer.astro`
+  - `src/components/ui/Container.astro` — base width/gutter primitive used by shared shell wrappers
+  - `src/components/ui/Button.astro` — reusable CTA primitive for anchor/button actions
+  - `src/components/ui/SectionHeading.astro` — reusable heading primitive for section title stacks
+  - `src/components/blocks/CTASection.astro`
+  - `src/components/blocks/ImageText.astro`
+  - `src/components/blocks/TourCard.astro`
+  - `src/components/blocks/TourGrid.astro`
+  - `src/components/blocks/Breadcrumbs.astro`
+  - `src/components/blocks/TourHero.astro`
 - Pages:
   - `src/pages/...` (routes follow spec §6.1)
 - Sanity Studio:
@@ -905,11 +914,35 @@ Reusable page sections:
 - LeadForm
 - GalleryStrip
 - Breadcrumbs
+- TourGrid
+- TourHero
 
 Rules:
 
 - Avoid page-specific hardcoded layouts when a reusable block is possible.
 - Prefer composable sections instead of monolithic page templates.
+
+### 22.6.1.1 Implemented frontend inventory (current)
+
+Primitives:
+
+- `Container` (`src/components/ui/Container.astro`) — base content width and horizontal gutters for shared shells/content wrappers.
+- `Button` (`src/components/ui/Button.astro`) — shared CTA primitive supporting anchor/button rendering and style variants.
+- `SectionHeading` (`src/components/ui/SectionHeading.astro`) — standardized eyebrow + title + description heading stack for reusable sections.
+
+Blocks:
+
+- `CTASection` (`src/components/blocks/CTASection.astro`) — centered conversion section combining SectionHeading + primary Button.
+- `ImageText` (`src/components/blocks/ImageText.astro`) — reusable editorial two-column image/text block with optional CTA.
+- `TourCard` (`src/components/blocks/TourCard.astro`) — reusable tour listing card with image, metadata, and secondary CTA.
+- `TourGrid` (`src/components/blocks/TourGrid.astro`) — responsive grid renderer for multiple TourCard items with optional section heading.
+- `Breadcrumbs` (`src/components/blocks/Breadcrumbs.astro`) — shared breadcrumb navigation with linked ancestors and current-page terminal item.
+- `TourHero` (`src/components/blocks/TourHero.astro`) — tour detail hero with optional breadcrumbs, rating line, intro, and 16:9 hero image.
+
+Shared shell usage:
+
+- Global header and footer use `Container` for consistent width/gutters.
+- Header WhatsApp CTA uses `Button` to keep CTA styling consistent with the UI primitive system.
 
 ### 22.6.2 CMS vs Presentation Responsibility
 
@@ -1052,6 +1085,7 @@ Mobile navigation rules:
 Architecture rule:
 
 - Global navigation must be maintained in the shared header component, not duplicated per page.
+- Header CTA must use the shared Button primitive; shared header/footer wrappers must use the Container primitive.
 
 ---
 
