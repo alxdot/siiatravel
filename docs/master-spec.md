@@ -579,7 +579,7 @@ Release rules:
 - Base layout (HTML shell + head slot):
   - `src/layouts/BaseLayout.astro`
 - Shared UI:
-  - `src/components/Header.astro`
+  - `src/components/Header.astro` — shared global header with desktop navigation, mobile menu, and WhatsApp CTA
   - `src/components/Footer.astro`
 - Pages:
   - `src/pages/...` (routes follow spec §6.1)
@@ -1003,6 +1003,53 @@ Avoid:
 - generic SaaS dashboard styling
 - template-looking layouts
 - overly animated UI
+
+### 22.6.7 Global Navigation System
+
+The website must use a shared global header/navigation system implemented in the shared site header component.
+
+Navigation goals:
+
+- Keep top-level service discovery clear
+- Preserve a premium, calm, editorial feel
+- Support mobile navigation without heavy JavaScript
+- Keep the primary CTA visible
+
+Desktop navigation structure:
+
+Primary navigation:
+
+- Экскурсии
+- Яхты
+- Гид
+- Переводчик
+- Трансфер
+- Шопинг
+- Вертолет
+- Мероприятия
+
+Secondary / utility navigation:
+
+- Блог
+- Отзывы
+- Контакты
+
+CTA:
+
+- WhatsApp CTA must remain visible in the header
+
+Mobile navigation rules:
+
+- Mobile header must include brand, WhatsApp CTA, and hamburger toggle
+- Hamburger toggle opens the mobile navigation panel
+- Mobile navigation must include all primary and utility links
+- Mobile menu should close when a navigation link is selected
+- Mobile menu should support Escape key close behavior
+- Mobile menu implementation must stay lightweight
+
+Architecture rule:
+
+- Global navigation must be maintained in the shared header component, not duplicated per page.
 
 ---
 
