@@ -888,6 +888,8 @@ UI primitives
 - Stars
 - PriceTag
 
+Container is the base width primitive for shared shell/content wrappers and must provide the default max width plus horizontal gutters.
+
 Blocks
 
 Reusable page sections:
