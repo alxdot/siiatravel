@@ -15,6 +15,12 @@ const secondaryLinks = [
   { href: "/reviews", label: "Отзывы" },
   { href: "/contacts", label: "Контакты" },
 ];
+
+const pathname = Astro.url.pathname;
+
+const isLinkActive = (href: string) => {
+  return pathname === href || pathname.startsWith(`${href}/`);
+};
 ---
 
 <header class="border-b border-black/10 bg-white">
@@ -27,7 +33,10 @@ const secondaryLinks = [
       <div class="hidden md:flex items-center gap-6">
         <nav aria-label="Дополнительная навигация" class="flex items-center gap-5 text-sm text-navy">
           {secondaryLinks.map((link) => (
-            <a href={link.href} class="font-medium transition-opacity hover:opacity-75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
+            <a
+              href={link.href}
+              class={`font-medium transition-opacity hover:opacity-75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${isLinkActive(link.href) ? "text-primary font-semibold" : "text-navy"}`}
+            >
               {link.label}
             </a>
           ))}
@@ -70,7 +79,10 @@ const secondaryLinks = [
 
     <nav aria-label="Основная навигация" class="hidden md:flex items-center gap-6 border-t border-black/10 py-3 text-sm text-navy">
       {primaryLinks.map((link) => (
-        <a href={link.href} class="font-medium transition-opacity hover:opacity-75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
+        <a
+          href={link.href}
+          class={`font-medium transition-opacity hover:opacity-75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${isLinkActive(link.href) ? "text-primary font-semibold" : "text-navy"}`}
+        >
           {link.label}
         </a>
       ))}
@@ -80,7 +92,10 @@ const secondaryLinks = [
       <nav aria-label="Мобильная навигация" class="space-y-4">
         <div class="space-y-1">
           {primaryLinks.map((link) => (
-            <a href={link.href} class="block rounded-lg px-2 py-2 text-base font-medium text-navy transition-colors hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
+            <a
+              href={link.href}
+              class={`block rounded-lg px-2 py-2 text-base font-medium transition-colors hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${isLinkActive(link.href) ? "text-primary font-semibold" : "text-navy"}`}
+            >
               {link.label}
             </a>
           ))}
@@ -88,7 +103,10 @@ const secondaryLinks = [
 
         <div class="border-t border-black/10 pt-3">
           {secondaryLinks.map((link) => (
-            <a href={link.href} class="block rounded-lg px-2 py-2 text-sm font-medium text-navy/90 transition-colors hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
+            <a
+              href={link.href}
+              class={`block rounded-lg px-2 py-2 text-sm font-medium transition-colors hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${isLinkActive(link.href) ? "text-primary font-semibold" : "text-navy"}`}
+            >
               {link.label}
             </a>
           ))}
